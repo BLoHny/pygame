@@ -135,10 +135,14 @@ class Platform(pg.sprite.Sprite):
         self.game = game
 
         images = []
-        for key, value in spriteDict.items():
-            if "ground" in key:
-                v = list(value)
-                images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
+        v = spriteDict["ground_grass.png"]
+        images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
+        v = spriteDict["ground_grass_broken.png"]
+        images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
+        v = spriteDict["ground_grass_small.png"]
+        images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
+        v = spriteDict["ground_grass_small_broken.png"]
+        images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
 
         self.image = choice(images)
         self.image.set_colorkey(BLACK)
@@ -156,6 +160,8 @@ class MovingPlatform(Platform):
 
         images = []
         v = spriteDict['spring_out.png']
+        images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
+        v = spriteDict['grass_brown1.png']
         images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
 
         self.image = choice(images)

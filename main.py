@@ -111,7 +111,7 @@ class Game:
             width = random.randrange(50, 100)
             if random.randrange(0, 10) <= int(self.score / 200):
                 startX = random.randrange(0, WIDTH - width - 30)
-                p = MovingPlatform(self, startX, random.randrange(startX + 10, WIDTH - width),
+                p = MovingPlatform(self, startX, random.randrange(startX + 30, WIDTH - width),
                                    pList[pListLen - 1].rect.top - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 4))
             else:
                 p = Platform(self, random.randrange(0, WIDTH - width),
