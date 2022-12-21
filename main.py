@@ -39,6 +39,7 @@ class Game:
         self.platforms = pg.sprite.Group()
 
         self.player = Player(self)
+        self.player.rect.x = WIDTH / 2 - 50
         self.all_sprites.add(self.player)
 
         for plat in PLATFORM_LIST:
@@ -98,13 +99,6 @@ class Game:
             self.playing = False
 
         # Spawn new platforms
-
-        # while len(self.platforms) < 6:
-        #     width = random.randrange(50, 100)
-        #     p = Platform(self, random.randrange(0, WIDTH - width),
-        #                  random.randrange(-75, -30))
-        #     self.platforms.add(p)
-        #     self.all_sprites.add(p)
         pListLen = len(self.platforms)
         pList = self.platforms.sprites()
         while pListLen is not 0 and self.player.rect.bottom - pList[pListLen - 1].rect.top < 240:
@@ -112,7 +106,7 @@ class Game:
             if random.randrange(0, 10) <= int(self.score / 200):
                 startX = random.randrange(0, WIDTH - width - 30)
                 p = MovingPlatform(self, startX, random.randrange(startX + 30, WIDTH - width),
-                                   pList[pListLen - 1].rect.top - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 4))
+                                   pList[pListLen - 1].rect.top - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 5))
             else:
                 p = Platform(self, random.randrange(0, WIDTH - width),
                              pList[pListLen - 1].rect.top - random.randrange(50 + min(int(self.score / 10), 189), 240))
@@ -120,6 +114,8 @@ class Game:
             self.all_sprites.add(p)
             pListLen += 1
             pList = self.platforms.sprites()
+            # self.score += 10
+            
         for platform in self.platforms:
             if type(platform) is MovingPlatform:
                 platform.update()

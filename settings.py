@@ -14,11 +14,11 @@ PLAYER_GRAVITY = 0.8
 PLAYER_JUMP = 20
 
 #시작지점
-PLATFORM_LIST = [(0, HEIGHT - 60)]
-                #  (WIDTH/2 - 50, HEIGHT*3/4),
-                #  (125, HEIGHT - 350),
-                #  (350, 200,),
-                #  (175, 100,)]
+PLATFORM_LIST = [(0, HEIGHT - 60),
+                 (WIDTH/2 - 50, HEIGHT*3/4),
+                 (125, HEIGHT - 350),
+                 (350, 200,),
+                 (175, 100,)]
 
 #색깔
 WHITE = (255, 255, 255)
