@@ -136,7 +136,6 @@ class Platform(pg.sprite.Sprite):
 
         images = []
         for key, value in spriteDict.items():
-            print(key)
             if "ground" in key:
                 v = list(value)
                 images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
@@ -146,3 +145,32 @@ class Platform(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        
+class MovingPlatform(Platform):
+    startX = 0
+    endX = 0
+    speed = 0
+    def __init__(self, game, startX, endX, y, speed):
+        pg.sprite.Sprite.__init__(self)
+        self.game = game
+
+        images = []
+        v = spriteDict['spring_out.png']
+        images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
+
+        self.image = choice(images)
+        self.image.set_colorkey(BLACK)
+        self.rect = self.image.get_rect()
+        self.rect.x = startX
+        self.startx = startX + 1
+        self.endX = endX
+        self.rect.y = y
+        self.speed = speed
+    def update(self):
+        self.rect.x += self.speed
+        if self.rect.x >= self.endX:
+            self.rect.x = self.endX
+            self.speed = -self.speed
+        if self.rect.x <= self.startX:
+            self.rect.x = self.startX
+            self.speed = -self.speed

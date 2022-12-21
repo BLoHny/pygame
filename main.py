@@ -5,6 +5,8 @@ from sprites import *
 from os import path
 
 a = 1
+
+
 class Game:
     def __init__(self):
         pg.init()
@@ -18,7 +20,7 @@ class Game:
     def load_data(self):
         self.dir = path.dirname(__file__)
         img_dir = path.join(self.dir, 'img')
-        
+
         try:
             with open(path.join(self.dir, HS_FILE), 'r') as f:
                 self.highscore = int(f.read())
@@ -28,7 +30,8 @@ class Game:
         self.spritesheet = Spritesheet(path.join(img_dir, SPRITESHEET))
 
         self.snd_dir = path.join(self.dir, 'snd')
-        self.gameover_sound = pg.mixer.Sound(path.join(self.snd_dir, 'game_over.wav'))
+        self.gameover_sound = pg.mixer.Sound(
+            path.join(self.snd_dir, 'game_over.wav'))
 
     def new(self):
         self.score = 0
@@ -43,7 +46,7 @@ class Game:
             self.all_sprites.add(p)
             self.platforms.add(p)
 
-        pg.mixer.music.load(path.join(self.snd_dir,'happytune.mp3'))
+        pg.mixer.music.load(path.join(self.snd_dir, 'happytune.mp3'))
 
         self.run()
 
@@ -95,7 +98,7 @@ class Game:
             self.playing = False
 
         # Spawn new platforms
-        
+
         # while len(self.platforms) < 6:
         #     width = random.randrange(50, 100)
         #     p = Platform(self, random.randrange(0, WIDTH - width),
@@ -104,14 +107,23 @@ class Game:
         #     self.all_sprites.add(p)
         pListLen = len(self.platforms)
         pList = self.platforms.sprites()
-        while pListLen is not 0 and self.player.rect.bottom - pList[pListLen - 1].rect.top < 230:
+        while pListLen is not 0 and self.player.rect.bottom - pList[pListLen - 1].rect.top < 240:
             width = random.randrange(50, 100)
-            p = Platform(self, random.randrange(0, WIDTH - width),
-                         pList[pListLen - 1].rect.top - random.randrange(50, 230))
+            if random.randrange(0, 10) <= int(self.score / 200):
+                startX = random.randrange(0, WIDTH - width - 30)
+                p = MovingPlatform(self, startX, random.randrange(startX + 10, WIDTH - width),
+                                   pList[pListLen - 1].rect.top - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 4))
+            else:
+                p = Platform(self, random.randrange(0, WIDTH - width),
+                             pList[pListLen - 1].rect.top - random.randrange(50 + min(int(self.score / 10), 189), 240))
             self.platforms.add(p)
             self.all_sprites.add(p)
             pListLen += 1
             pList = self.platforms.sprites()
+        for platform in self.platforms:
+            if type(platform) is MovingPlatform:
+                platform.update()
+                
 
     def events(self):
         # Game Loop - Events
@@ -121,7 +133,7 @@ class Game:
                 if self.playing:
                     self.playing = False
                 self.running = False
-                
+
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
                     self.player.jump()
@@ -140,8 +152,10 @@ class Game:
         self.all_sprites.draw(self.screen)
         self.screen.blit(self.player.image, self.player.rect)
         self.draw_text(str(self.score), 22, WHITE, WIDTH/2, 15)
-        self.draw_text("player height" + str(self.player.rect.bottom), 22, WHITE, WIDTH/2, 40)
-        self.draw_text("height of last appended platform" + str(fet.rect.top), 22, WHITE, WIDTH/2, 65)
+        self.draw_text("player height" +
+                       str(self.player.rect.bottom), 22, WHITE, WIDTH/2, 40)
+        self.draw_text("height of last appended platform" +
+                       str(fet.rect.top), 22, WHITE, WIDTH/2, 65)
 
         # *after* drawing everything, flip the display
         pg.display.flip()
@@ -171,8 +185,6 @@ class Game:
                        22, WHITE, WIDTH/2, HEIGHT/2)
         self.draw_text("Press a key to play again",
                        22, WHITE, WIDTH/2, HEIGHT*3/4)
-        
-        
 
         if self.score > self.highscore:
             self.gameover_sound.play()
@@ -206,6 +218,7 @@ class Game:
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
         self.screen.blit(text_surface, text_rect)
+
 
 g = Game()
 g.show_start_screen()
