@@ -5,7 +5,6 @@ from sprites import *
 from os import path
 
 a = 1
-
 class Game:
     def __init__(self):
         pg.init()
@@ -96,12 +95,23 @@ class Game:
             self.playing = False
 
         # Spawn new platforms
-        while len(self.platforms) < 6:
+        
+        # while len(self.platforms) < 6:
+        #     width = random.randrange(50, 100)
+        #     p = Platform(self, random.randrange(0, WIDTH - width),
+        #                  random.randrange(-75, -30))
+        #     self.platforms.add(p)
+        #     self.all_sprites.add(p)
+        pListLen = len(self.platforms)
+        pList = self.platforms.sprites()
+        while pListLen is not 0 and self.player.rect.bottom - pList[pListLen - 1].rect.top < 230:
             width = random.randrange(50, 100)
             p = Platform(self, random.randrange(0, WIDTH - width),
-                         random.randrange(-75, -30))
+                         pList[pListLen - 1].rect.top - random.randrange(50, 230))
             self.platforms.add(p)
             self.all_sprites.add(p)
+            pListLen += 1
+            pList = self.platforms.sprites()
 
     def events(self):
         # Game Loop - Events
@@ -120,11 +130,18 @@ class Game:
                     self.player.jump_cut()
 
     def draw(self):
+        if self.platforms.sprites().__len__() > 0:
+            fet = self.platforms.sprites().pop()
+        else:
+            fet = Platform(self, 0, 0)
+        self.platforms.sprites().append(fet)
         # Game Loop - Draw
         self.screen.fill(BGCOLOR)
         self.all_sprites.draw(self.screen)
         self.screen.blit(self.player.image, self.player.rect)
         self.draw_text(str(self.score), 22, WHITE, WIDTH/2, 15)
+        self.draw_text("player height" + str(self.player.rect.bottom), 22, WHITE, WIDTH/2, 40)
+        self.draw_text("height of last appended platform" + str(fet.rect.top), 22, WHITE, WIDTH/2, 65)
 
         # *after* drawing everything, flip the display
         pg.display.flip()

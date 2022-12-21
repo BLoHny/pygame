@@ -1,9 +1,14 @@
 import pygame as pg
 from settings import *
 from random import choice
+import xml.etree.ElementTree as ET
 vec = pg.math.Vector2
 
-
+tree = ET.parse('img/spritesheet_jumper.xml')
+root = tree.getroot()
+spriteDict : dict = {}
+for child in root:
+    spriteDict[child.get('name')] = [child.get('x'), child.get('y'), child.get('width'), child.get('height')]
 class Spritesheet:
     # Utility class for loading spritesheets
     def __init__(self, filename):
@@ -129,8 +134,12 @@ class Platform(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
         self.game = game
 
-        images = [self.game.spritesheet.get_image(0, 288, 380, 94),
-                  self.game.spritesheet.get_image(213, 1662, 201, 100)]
+        images = []
+        for key, value in spriteDict.items():
+            print(key)
+            if "ground" in key:
+                v = list(value)
+                images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
 
         self.image = choice(images)
         self.image.set_colorkey(BLACK)
