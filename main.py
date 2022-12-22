@@ -35,6 +35,8 @@ class Game:
         self.snd_dir = path.join(self.dir, 'snd')
         self.gameover_sound = pg.mixer.Sound(
             path.join(self.snd_dir, 'game_over.wav'))
+        self.jump_sound = pg.mixer.Sound(
+            path.join(self.snd_dir, 'jumpSound.wav'))
 
     def new(self):
         self.score = 0
@@ -161,7 +163,8 @@ class Game:
 
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
-                    self.player.jump()
+                    if self.player.jump():
+                        self.jump_sound.play()
             if event.type == pg.KEYUP:
                 if event.key == pg.K_SPACE:
                     self.player.jump_cut()

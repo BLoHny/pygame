@@ -73,6 +73,8 @@ class Player(pg.sprite.Sprite):
         if hits and not self.jumping:
             self.jumping = True
             self.vel.y = -PLAYER_JUMP
+            return True
+        return False
 
     def update(self):
         self.animate()
