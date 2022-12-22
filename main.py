@@ -5,6 +5,8 @@ from sprites import *
 from os import path
 import pygame, time
 
+DEBUG = True
+
 a = 1
 draw_background = pg.image.load("img/draw_backgroud.png")
 draw_background = pg.transform.scale(draw_background,(480,600))
@@ -190,15 +192,16 @@ class Game:
         self.all_sprites.draw(self.screen)
         self.screen.blit(self.player.image, self.player.rect)
         self.draw_text(str(self.score), 22, WHITE, WIDTH/2, 15)
-        self.draw_text("player y" +
+        if DEBUG:
+            self.draw_text("player y" +
                        str(self.player.rect.y), 22, WHITE, WIDTH/2, 40)
-        self.draw_text("player x" +
+            self.draw_text("player x" +
                        str(self.player.rect.x), 22, WHITE, WIDTH/2, 40 + 25)
-        self.draw_text("y of last appended platform" +
+            self.draw_text("y of last appended platform" +
                        str(fet.rect.y), 22, WHITE, WIDTH/2, 65 + 25)
-        self.draw_text("x of last appended platform" +
+            self.draw_text("x of last appended platform" +
                        str(fet.rect.x), 22, WHITE, WIDTH/2, 90 + 25) 
-        self.draw_text("" + str(pg.sprite.spritecollide(self.player, self.platforms, False)), 22, WHITE, WIDTH/2, 115 + 25)
+            self.draw_text("" + str(pg.sprite.spritecollide(self.player, self.platforms, False)), 22, WHITE, WIDTH/2, 115 + 25)
 
         # *after* drawing everything, flip the display
         pg.display.flip()
