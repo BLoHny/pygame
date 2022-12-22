@@ -85,6 +85,7 @@ class Game:
                     self.player.vel.y = 0
                     self.player.jumping = False
                     if type(lowest) is BrokenPlatform:
+                        if lowest.genTime == 0 : lowest.genTime = time.time()
                         if lowest.update() : 
                             lowest.kill()
                             list.remove(self.platforms, lowest)

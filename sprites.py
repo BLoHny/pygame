@@ -233,7 +233,7 @@ class BrokenPlatform(Platform):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.genTime = time.time()
+        
     def update(self):
         if time.time() - self.genTime > 3:
             return True
