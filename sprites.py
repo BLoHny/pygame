@@ -208,7 +208,7 @@ class MovingPlatform(Platform):
             self.rect.x = self.startX
             self.speed = -self.speed
 
-class BrokenPlatform(pg.sprite.Sprite):
+class BrokenPlatform(Platform):
     def __init__(self, game, x, y):
         pg.sprite.Sprite.__init__(self)
         self.game = game
@@ -224,6 +224,3 @@ class BrokenPlatform(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        
-    #def broken(self):
-        

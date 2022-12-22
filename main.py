@@ -6,7 +6,6 @@ from os import path
 
 a = 1
 
-
 class Game:
     def __init__(self):
         pg.init()
@@ -79,6 +78,10 @@ class Game:
                     self.player.pos.y = lowest.rect.top + 0.1
                     self.player.vel.y = 0
                     self.player.jumping = False
+                    if type(lowest) is BrokenPlatform:
+                        lowest.kill()
+                        list.remove(self.platforms, lowest)
+                    
 
         # If player reached top 1/4 of screen
         if self.player.rect.top <= HEIGHT/4:
@@ -167,6 +170,7 @@ class Game:
                        str(fet.rect.y), 22, WHITE, WIDTH/2, 65 + 25)
         self.draw_text("x of last appended platform" +
                        str(fet.rect.x), 22, WHITE, WIDTH/2, 90 + 25) 
+        self.draw_text("" + str(pg.sprite.spritecollide(self.player, self.platforms, False)), 22, WHITE, WIDTH/2, 115 + 25)
 
         # *after* drawing everything, flip the display
         pg.display.flip()
