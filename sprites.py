@@ -169,11 +169,11 @@ class MovingYPlatform(Platform):
         self.endY = endY
         self.speed = speed
     def update(self):
-        self.rect.y += self.speed
-        if self.rect.y >= self.endY:
+        self.rect.y -= self.speed
+        if self.rect.y <= self.endY:
             self.rect.y = self.endY
             self.speed = -self.speed
-        if self.rect.y <= self.startY:
+        if self.rect.y >= self.startY:
             self.rect.y = self.startY
             self.speed = -self.speed
             
