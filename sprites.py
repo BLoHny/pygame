@@ -216,7 +216,7 @@ class MovingPlatform(Platform):
             self.rect.x = self.startX
             self.speed = -self.speed
             
-class coin(Platform):
+class Coin(Platform):
     def __init__(self, game,x, y):
         pg.sprite.Sprite.__init__(self)
         self.game = game
@@ -229,6 +229,10 @@ class coin(Platform):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+    
+    def update(self):
+        self.score -= 10
+        
 
 class BrokenPlatform(Platform):
     genTime = 2147483647
