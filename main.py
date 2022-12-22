@@ -91,10 +91,6 @@ class Game:
                 if platform.update() : 
                     platform.kill()
                     list.remove(self.platforms, platform)
-            if type(platform) is Coin:
-                if pg.sprite.spritecollide(self.player, self.platforms, False):
-                    platform.update()
-            
         
         self.all_sprites.update()
         # If player reached top 1/4 of screen
@@ -108,7 +104,7 @@ class Game:
                 if plat.rect.top >= HEIGHT:
                     plat.kill()
                     list.remove(self.platforms, plat)
-                    # self.score += 10
+                    self.score += 10
 
         # Die
         if self.player.rect.bottom > HEIGHT:
@@ -120,14 +116,13 @@ class Game:
                 if sprite.rect.bottom < 0:
                     sprite.kill()
                     list.remove(self.platforms, sprite)
-                    self.score -= 10
+                    
         if len(self.platforms) <= 0:
             self.playing = False
 
         # Spawn new platforms
         pListLen = len(self.platforms)
         pList = self.platforms
-
         while pListLen != 0 and self.player.rect.bottom - pList[pListLen - 1].rect.top < 240:
             if type(pList[pListLen - 1]) is not MovingYPlatform:
                 pTopVal = pList[pListLen - 1].rect.top
@@ -142,7 +137,7 @@ class Game:
             mpPer = 6 + int(self.score / 37.037)
             bpPer = 4 + int(self.score / 25.555555555555555) 
             if trig < mpPer:
-                if random.randrange(0, 1) == 0 and self.score >= 1000:
+                if random.randrange(0, 1) == 0 and self.score >= 500:
                     startY = pTopVal - random.randrange(
                         50 + min(int(self.score / 10), 59), 110)
                     p = MovingYPlatform(self, random.randrange(0, WIDTH - width),
@@ -161,7 +156,23 @@ class Game:
             self.all_sprites.add(p)
             pListLen = len(pList)
             pList = self.platforms
-            self.score += 10
+            # self.score += 10
+        cList = []
+        
+        # #generate coin
+        # while len(cList) < 0:
+        #     c = Coin(self, random.randrange(0, WIDTH - 30), random.randrange(50 + min(int(self.score / 10), 189), 240))
+        #     self.all_sprites.add(c)
+        #     cList.append(c)
+        
+        # # #check if player hits a coin
+        # cHits = pg.sprite.spritecollide(self.player, cList, False)
+        # if cHits:
+        #     for cHit in cHits:
+        #         self.score += 10
+        #         cHit.kill()
+        #         list.remove(cList, cHit)
+
         
         # check if player hits a platfrom
         if self.player.vel.y > 0:
