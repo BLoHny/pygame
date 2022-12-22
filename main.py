@@ -115,7 +115,10 @@ class Game:
 
         while pListLen is not 0 and self.player.rect.bottom - pList[pListLen - 1].rect.top < 240:
             width = random.randrange(50, 100)
-            if random.randrange(0, 10) <= int(self.score / 200):
+            trig = random.randrange(0, 100)
+            mpPer = 6 + int(self.score / 37.037)
+            bpPer = 4 + int(self.score / 25.555555555555555) 
+            if trig < mpPer:
                 if random.randrange(0, 2) == 0 and self.score >= 1000:
                     startY = pList[pListLen - 1].rect.top - random.randrange(
                         50 + min(int(self.score / 10), 189), 240)
@@ -125,7 +128,9 @@ class Game:
                     startX = random.randrange(0, WIDTH - width - 30)
                     p = MovingPlatform(self, startX, random.randrange(startX + 10, WIDTH - width),
                                    pList[pListLen - 1].rect.top - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 4 + int(self.score / 500)))
-
+            elif trig < mpPer + bpPer:
+                p = BrokenPlatform(self, random.randrange(0, WIDTH - width), pList[pListLen - 1].rect.top - random.randrange(
+                    50 + min(int(self.score / 10), 189), 240))
             else:
                 p = Platform(self, random.randrange(0, WIDTH - width), pList[pListLen - 1].rect.top - random.randrange(
                     50 + min(int(self.score / 10), 189), 240))
