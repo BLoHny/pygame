@@ -91,6 +91,10 @@ class Game:
                 if platform.update() : 
                     platform.kill()
                     list.remove(self.platforms, platform)
+            if type(platform) is Coin:
+                if pg.sprite.spritecollide(self.player, self.platforms, False):
+                    platform.update()
+            
         
         self.all_sprites.update()
         # If player reached top 1/4 of screen
