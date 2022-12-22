@@ -36,7 +36,7 @@ class Game:
     def new(self):
         self.score = 0
         self.all_sprites = pg.sprite.Group()
-        self.platforms = pg.sprite.Group()
+        self.platforms = []
 
         self.player = Player(self)
         self.player.rect.x = WIDTH / 2 - 50
@@ -45,7 +45,7 @@ class Game:
         for plat in PLATFORM_LIST:
             p = Platform(self, *plat)
             self.all_sprites.add(p)
-            self.platforms.add(p)
+            self.platforms.append(p)
 
         pg.mixer.music.load(path.join(self.snd_dir, 'happytune.mp3'))
 
@@ -85,41 +85,52 @@ class Game:
             self.player.pos.y += max(abs(self.player.vel.y), 5)
             for plat in self.platforms:
                 plat.rect.y += max(abs(self.player.vel.y), 5)
+                if type(plat) is MovingYPlatform:
+                    plat.startY += max(abs(self.player.vel.y), 5)
+                    plat.endY += max(abs(self.player.vel.y), 5)
                 if plat.rect.top >= HEIGHT:
                     plat.kill()
-                    self.score += 10
+                    list.remove(self.platforms, plat)
+                    # self.score += 10
 
         # Die
         if self.player.rect.bottom > HEIGHT:
             for sprite in self.all_sprites:
                 sprite.rect.y -= max(self.player.vel.y, 10)
+                if type(sprite) is MovingYPlatform:
+                    sprite.startY -= max(abs(self.player.vel.y), 5)
+                    sprite.endY -= max(abs(self.player.vel.y), 5)
                 if sprite.rect.bottom < 0:
                     sprite.kill()
-        if len(self.platforms) == 0:
+                    list.remove(self.platforms, sprite)
+        if len(self.platforms) <= 0:
             self.playing = False
 
         # Spawn new platforms
         pListLen = len(self.platforms)
-        pList = self.platforms.sprites()
+        pList = self.platforms
+
         while pListLen is not 0 and self.player.rect.bottom - pList[pListLen - 1].rect.top < 240:
             width = random.randrange(50, 100)
             if random.randrange(0, 10) <= int(self.score / 200):
-                startX = random.randrange(0, WIDTH - width - 30)
-                p = MovingPlatform(self, startX, random.randrange(startX + 30, WIDTH - width),
-                                   pList[pListLen - 1].rect.top - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 5))
+                    startY = pList[pListLen - 1].rect.top - random.randrange(
+                            50 + min(int(self.score / 10), 189), 240)
+                    p = MovingYPlatform(self, random.randrange(0, WIDTH - width),
+                                        startY, startY - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 5))
             else:
-                p = Platform(self, random.randrange(0, WIDTH - width),
-                             pList[pListLen - 1].rect.top - random.randrange(50 + min(int(self.score / 10), 189), 240))
-            self.platforms.add(p)
+                p = Platform(self, random.randrange(0, WIDTH - width), pList[pListLen - 1].rect.top - random.randrange(
+                    50 + min(int(self.score / 10), 189), 240))
+            self.platforms.append(p)
             self.all_sprites.add(p)
-            pListLen += 1
-            pList = self.platforms.sprites()
-            # self.score += 10
-            
+            pListLen = len(pList)
+            pList = self.platforms
+            self.score += 10
+
         for platform in self.platforms:
             if type(platform) is MovingPlatform:
                 platform.update()
-                
+            if type(platform) is MovingYPlatform:
+                platform.update()
 
     def events(self):
         # Game Loop - Events
@@ -138,20 +149,24 @@ class Game:
                     self.player.jump_cut()
 
     def draw(self):
-        if self.platforms.sprites().__len__() > 0:
-            fet = self.platforms.sprites().pop()
+        if self.platforms.__len__() > 0:
+            fet = self.platforms.pop()
         else:
             fet = Platform(self, 0, 0)
-        self.platforms.sprites().append(fet)
+        self.platforms.append(fet)
         # Game Loop - Draw
         self.screen.fill(BGCOLOR)
         self.all_sprites.draw(self.screen)
         self.screen.blit(self.player.image, self.player.rect)
         self.draw_text(str(self.score), 22, WHITE, WIDTH/2, 15)
-        self.draw_text("player height" +
-                       str(self.player.rect.bottom), 22, WHITE, WIDTH/2, 40)
-        self.draw_text("height of last appended platform" +
-                       str(fet.rect.top), 22, WHITE, WIDTH/2, 65)
+        self.draw_text("player y" +
+                       str(self.player.rect.y), 22, WHITE, WIDTH/2, 40)
+        self.draw_text("player x" +
+                       str(self.player.rect.x), 22, WHITE, WIDTH/2, 40 + 25)
+        self.draw_text("y of last appended platform" +
+                       str(fet.rect.y), 22, WHITE, WIDTH/2, 65 + 25)
+        self.draw_text("x of last appended platform" +
+                       str(fet.rect.x), 22, WHITE, WIDTH/2, 90 + 25) 
 
         # *after* drawing everything, flip the display
         pg.display.flip()
