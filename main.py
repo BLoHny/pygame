@@ -113,10 +113,16 @@ class Game:
         while pListLen is not 0 and self.player.rect.bottom - pList[pListLen - 1].rect.top < 240:
             width = random.randrange(50, 100)
             if random.randrange(0, 10) <= int(self.score / 200):
+                if random.randrange(0, 2) == 0 and self.score >= 1000:
                     startY = pList[pListLen - 1].rect.top - random.randrange(
-                            50 + min(int(self.score / 10), 189), 240)
+                        50 + min(int(self.score / 10), 189), 240)
                     p = MovingYPlatform(self, random.randrange(0, WIDTH - width),
-                                        startY, startY - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 5))
+                                        startY, startY - random.randrange(100 + min(int(self.score / 10), 189), 300), random.randrange(2, 4))
+                else:
+                    startX = random.randrange(0, WIDTH - width - 30)
+                    p = MovingPlatform(self, startX, random.randrange(startX + 10, WIDTH - width),
+                                   pList[pListLen - 1].rect.top - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 4 + int(self.score / 500)))
+
             else:
                 p = Platform(self, random.randrange(0, WIDTH - width), pList[pListLen - 1].rect.top - random.randrange(
                     50 + min(int(self.score / 10), 189), 240))
@@ -166,7 +172,7 @@ class Game:
         self.draw_text("y of last appended platform" +
                        str(fet.rect.y), 22, WHITE, WIDTH/2, 65 + 25)
         self.draw_text("x of last appended platform" +
-                       str(fet.rect.x), 22, WHITE, WIDTH/2, 90 + 25) 
+                       str(fet.rect.x), 22, WHITE, WIDTH/2, 90 + 25)
 
         # *after* drawing everything, flip the display
         pg.display.flip()
