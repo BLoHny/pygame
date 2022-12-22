@@ -118,7 +118,7 @@ class Game:
         pListLen = len(self.platforms)
         pList = self.platforms
 
-        while pListLen is not 0 and self.player.rect.bottom - pList[pListLen - 1].rect.top < 240:
+        while pListLen != 0 and self.player.rect.bottom - pList[pListLen - 1].rect.top < 240:
             width = random.randrange(50, 100)
             trig = random.randrange(0, 100)
             mpPer = 6 + int(self.score / 37.037)
