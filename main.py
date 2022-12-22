@@ -76,24 +76,23 @@ class Game:
         pg.mixer.music.fadeout(500)
 
     def update(self):
+        if self.score < 0 : self.score = 0
+        mhits = []
         # Game Loop - Update
+        #update special platforms
+        for platform in self.platforms:
+            if type(platform) is MovingPlatform:
+                platform.update()
+            if type(platform) is MovingYPlatform:
+                if self.player.rect.bottom <= platform.rect.top and self.player.rect.bottom >= platform.rect.top - 15:
+                    mhits.append(platform)
+                platform.update()
+            if type(platform) is BrokenPlatform:
+                if platform.update() : 
+                    platform.kill()
+                    list.remove(self.platforms, platform)
+        
         self.all_sprites.update()
-        # check if player hits a platfrom
-        if self.player.vel.y > 0:
-            hits = pg.sprite.spritecollide(self.player, self.platforms, False)
-            if hits:
-                platform = hits[0]
-                for hit in hits:
-                    if hit.rect.bottom > platform.rect.bottom:
-                        platform = hit
-                if self.player.pos.y < platform.rect.centery:
-                    self.player.pos.y = platform.rect.top + 0.1
-                    self.player.vel.y = 0
-                    self.player.jumping = False
-                    if type(platform) is BrokenPlatform:
-                        if platform.genTime == 2147483647 : platform.genTime = time.time()
-                    
-
         # If player reached top 1/4 of screen
         if self.player.rect.top <= HEIGHT/4:
             self.player.pos.y += max(abs(self.player.vel.y), 5)
@@ -117,6 +116,7 @@ class Game:
                 if sprite.rect.bottom < 0:
                     sprite.kill()
                     list.remove(self.platforms, sprite)
+                    self.score -= 10
         if len(self.platforms) <= 0:
             self.playing = False
 
@@ -135,12 +135,12 @@ class Game:
                 break
             width = random.randrange(50, 100)
             trig = random.randrange(0, 100)
-            mpPer = 6 + int(self.score / 37.037)
+            mpPer = 600 + int(self.score / 37.037)
             bpPer = 4 + int(self.score / 25.555555555555555) 
             if trig < mpPer:
-                if random.randrange(0, 2) == 0 and self.score >= 1000:
+                if random.randrange(0, 1) == 0 and self.score >= 0:
                     startY = pTopVal - random.randrange(
-                        50 + min(int(self.score / 10), 189), 240)
+                        50 + min(int(self.score / 10), 59), 110)
                     p = MovingYPlatform(self, random.randrange(0, WIDTH - width),
                                         startY, startY - random.randrange(100 + min(int(self.score / 10), 189), 300), random.randrange(2, 4))
                 else:
@@ -158,16 +158,24 @@ class Game:
             pListLen = len(pList)
             pList = self.platforms
             self.score += 10
+        
+        # check if player hits a platfrom
+        if self.player.vel.y > 0:
+            hits = pg.sprite.spritecollide(self.player, self.platforms, False)
+            hits += mhits
+            if hits:
+                platform = hits[0]
+                for hit in hits:
+                    if hit.rect.bottom > platform.rect.bottom:
+                        platform = hit
+                if self.player.pos.y < platform.rect.centery:
+                    self.player.pos.y = platform.rect.top + 0.1
+                    self.player.vel.y = 0
+                    self.player.jumping = False
+                    if type(platform) is BrokenPlatform:
+                        if platform.genTime == 2147483647 : platform.genTime = time.time()
+                    
 
-        for platform in self.platforms:
-            if type(platform) is MovingPlatform:
-                platform.update()
-            if type(platform) is MovingYPlatform:
-                platform.update()
-            if type(platform) is BrokenPlatform:
-                if platform.update() : 
-                    platform.kill()
-                    list.remove(self.platforms, platform)
                     
 
     def events(self):
