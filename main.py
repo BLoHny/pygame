@@ -81,8 +81,9 @@ class Game:
                     self.player.vel.y = 0
                     self.player.jumping = False
                     if type(lowest) is BrokenPlatform:
-                        lowest.kill()
-                        list.remove(self.platforms, lowest)
+                        if lowest.update() : 
+                            lowest.kill()
+                            list.remove(self.platforms, lowest)
                     
 
         # If player reached top 1/4 of screen
@@ -147,6 +148,7 @@ class Game:
                 platform.update()
             if type(platform) is MovingYPlatform:
                 platform.update()
+                    
 
     def events(self):
         # Game Loop - Events
