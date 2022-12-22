@@ -150,6 +150,37 @@ class Platform(pg.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         
+class MovingYPlatform(Platform):
+    startY = 0
+    endY = 0
+    speed = 0
+    def __init__(self, game, x, startY, endY, speed):
+        pg.sprite.Sprite.__init__(self)
+        self.game = game
+
+        images = []
+        v = spriteDict['spring_out.png']
+        images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
+        v = spriteDict['grass_brown1.png']
+        images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
+
+        self.image = choice(images)
+        self.image.set_colorkey(BLACK)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = startY + 1
+        self.startY = startY
+        self.endY = startY
+        self.speed = speed
+    def update(self):
+        self.rect.y += self.speed
+        if self.rect.y >= self.endY:
+            self.rect.y = self.endY
+            self.speed = -self.speed
+        if self.rect.y <= self.startY:
+            self.rect.y = self.startY
+            self.speed = -self.speed
+            
 class MovingPlatform(Platform):
     startX = 0
     endX = 0
@@ -167,8 +198,8 @@ class MovingPlatform(Platform):
         self.image = choice(images)
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-        self.rect.x = startX
-        self.startx = startX + 1
+        self.rect.x = startX + 1
+        self.startx = startX
         self.endX = endX
         self.rect.y = y
         self.speed = speed
