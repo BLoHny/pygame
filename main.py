@@ -135,10 +135,10 @@ class Game:
                 break
             width = random.randrange(50, 100)
             trig = random.randrange(0, 100)
-            mpPer = 600 + int(self.score / 37.037)
+            mpPer = 6 + int(self.score / 37.037)
             bpPer = 4 + int(self.score / 25.555555555555555) 
             if trig < mpPer:
-                if random.randrange(0, 1) == 0 and self.score >= 0:
+                if random.randrange(0, 1) == 0 and self.score >= 1000:
                     startY = pTopVal - random.randrange(
                         50 + min(int(self.score / 10), 59), 110)
                     p = MovingYPlatform(self, random.randrange(0, WIDTH - width),
