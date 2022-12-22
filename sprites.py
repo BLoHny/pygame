@@ -137,11 +137,7 @@ class Platform(pg.sprite.Sprite):
         images = []
         v = spriteDict["ground_grass.png"]
         images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
-        v = spriteDict["ground_grass_broken.png"]
-        images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
         v = spriteDict["ground_grass_small.png"]
-        images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
-        v = spriteDict["ground_grass_small_broken.png"]
         images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
 
         self.image = choice(images)
@@ -168,9 +164,9 @@ class MovingYPlatform(Platform):
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.x = x
-        self.rect.y = startY + 1
+        self.rect.y = startY - 1
         self.startY = startY
-        self.endY = startY
+        self.endY = endY
         self.speed = speed
     def update(self):
         self.rect.y += self.speed
@@ -211,3 +207,23 @@ class MovingPlatform(Platform):
         if self.rect.x <= self.startX:
             self.rect.x = self.startX
             self.speed = -self.speed
+
+class BrokenPlatform(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.game = game
+
+        images = []
+        v = spriteDict["ground_grass_broken.png"]
+        images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
+        v = spriteDict["ground_grass_small_broken.png"]
+        images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
+
+        self.image = choice(images)
+        self.image.set_colorkey(BLACK)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        
+    #def broken(self):
+        
