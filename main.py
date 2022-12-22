@@ -125,25 +125,33 @@ class Game:
         pList = self.platforms
 
         while pListLen != 0 and self.player.rect.bottom - pList[pListLen - 1].rect.top < 240:
+            if type(pList[pListLen - 1]) is not MovingYPlatform:
+                pTopVal = pList[pListLen - 1].rect.top
+                pBotVal = pList[pListLen - 1].rect.top
+            else:
+                pTopVal = pList[pListLen - 1].endY
+                pBotVal = pList[pListLen - 1].startY
+            if self.player.rect.bottom - pBotVal >= 240:
+                break
             width = random.randrange(50, 100)
             trig = random.randrange(0, 100)
             mpPer = 6 + int(self.score / 37.037)
             bpPer = 4 + int(self.score / 25.555555555555555) 
             if trig < mpPer:
                 if random.randrange(0, 2) == 0 and self.score >= 1000:
-                    startY = pList[pListLen - 1].rect.top - random.randrange(
+                    startY = pTopVal - random.randrange(
                         50 + min(int(self.score / 10), 189), 240)
                     p = MovingYPlatform(self, random.randrange(0, WIDTH - width),
                                         startY, startY - random.randrange(100 + min(int(self.score / 10), 189), 300), random.randrange(2, 4))
                 else:
                     startX = random.randrange(0, WIDTH - width - 30)
                     p = MovingPlatform(self, startX, random.randrange(startX + 10, WIDTH - width),
-                                   pList[pListLen - 1].rect.top - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 4 + int(self.score / 500)))
+                                   pTopVal - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 4 + int(self.score / 500)))
             elif trig < mpPer + bpPer:
-                p = BrokenPlatform(self, random.randrange(0, WIDTH - width), pList[pListLen - 1].rect.top - random.randrange(
+                p = BrokenPlatform(self, random.randrange(0, WIDTH - width), pTopVal - random.randrange(
                     50 + min(int(self.score / 10), 189), 240))
             else:
-                p = Platform(self, random.randrange(0, WIDTH - width), pList[pListLen - 1].rect.top - random.randrange(
+                p = Platform(self, random.randrange(0, WIDTH - width), pTopVal - random.randrange(
                     50 + min(int(self.score / 10), 189), 240))
             self.platforms.append(p)
             self.all_sprites.add(p)
