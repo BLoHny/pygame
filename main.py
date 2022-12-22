@@ -124,7 +124,7 @@ class Game:
             width = random.randrange(50, 100)
             trig = random.randrange(0, 100)
             mpPer = 6 + int(self.score / 37.037)
-            bpPer = 50 + int(self.score / 25.555555555555555) 
+            bpPer = 4 + int(self.score / 25.555555555555555) 
             if trig < mpPer:
                 if random.randrange(0, 2) == 0 and self.score >= 1000:
                     startY = pList[pListLen - 1].rect.top - random.randrange(
