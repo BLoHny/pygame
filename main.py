@@ -7,8 +7,13 @@ import pygame, time
 
 a = 1
 
-b = pygame.time.Clock()
-b.tick()
+draw_background = pg.image.load("C:\IdeaFest\pygame\img\draw_backgroud.webp")
+draw_background = pg.transform.scale(draw_background,(480,600))
+start_background = pg.image.load("C:\IdeaFest\pygame\img\start_background.jpg")
+start_background = pg.transform.scale(start_background,(480,600))
+
+end_background = pg.image.load("C:\IdeaFest\pygame\img\end_background.jpg")
+end_background = pg.transform.scale(end_background,(480,600))
 
 class Game:
     def __init__(self):
@@ -180,7 +185,9 @@ class Game:
             fet = Platform(self, 0, 0)
         self.platforms.append(fet)
         # Game Loop - Draw
-        self.screen.fill(BGCOLOR)
+        #self.screen.fill(BGCOLOR)
+        
+        self.screen.blit(draw_background,(0,0))
         self.all_sprites.draw(self.screen)
         self.screen.blit(self.player.image, self.player.rect)
         self.draw_text(str(self.score), 22, WHITE, WIDTH/2, 15)
@@ -199,14 +206,15 @@ class Game:
 
     def show_start_screen(self):
         # game splash/start screen
-        self.screen.fill(BGCOLOR)
-        self.draw_text(TITLE, 48, WHITE, WIDTH/2, HEIGHT/4)
-        self.draw_text("Arrows to move, Space to jump",
-                       22, WHITE, WIDTH/2, HEIGHT/2)
-        self.draw_text("Press a key to play",
-                       22, WHITE, WIDTH/2, HEIGHT*3/4)
-        self.draw_text("High Score : " + str(self.highscore),
-                       22, WHITE, WIDTH/2, 15)
+        self.screen.blit(start_background,(0,0))
+        # self.screen.fill(BGCOLOR)
+        # self.draw_text(TITLE, 48, WHITE, WIDTH/2, HEIGHT/4)
+        # self.draw_text("Arrows to move, Space to jump",
+        #                22, WHITE, WIDTH/2, HEIGHT/2)
+        # self.draw_text("Press a key to play",
+        #                22, WHITE, WIDTH/2, HEIGHT*3/4)
+        # self.draw_text("High Score : " + str(self.highscore),
+        #                22, WHITE, WIDTH/2, 15)
         pg.display.flip()
         self.wait_for_key()
 
@@ -214,14 +222,15 @@ class Game:
         # game over/continue
         if not self.running:
             return
-        self.screen.fill(BGCOLOR)
+        #self.screen.fill(BGCOLOR)
+        self.screen.blit(end_background,(0,0))
         self.gameover_sound.play()
 
-        self.draw_text("GAME OVER", 48, WHITE, WIDTH/2, HEIGHT/4)
+        #self.draw_text("GAME OVER", 48, WHITE, WIDTH/2, HEIGHT/4)
         self.draw_text("Score : " + str(self.score),
-                       22, WHITE, WIDTH/2, HEIGHT/2)
+                       22, BLACK,WIDTH/2, HEIGHT/1/12)
         self.draw_text("Press a key to play again",
-                       22, WHITE, WIDTH/2, HEIGHT*3/4)
+                       22, BLACK, WIDTH/2, HEIGHT*10/12)
 
         if self.score > self.highscore:
             self.gameover_sound.play()

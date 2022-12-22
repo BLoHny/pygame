@@ -215,6 +215,28 @@ class MovingPlatform(Platform):
         if self.rect.x <= self.startX:
             self.rect.x = self.startX
             self.speed = -self.speed
+            
+class item(Platform):
+    
+    def __init__(self, game,x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.game = game
+        
+        item_images = []
+        v = spriteDict["silver_1.png"]
+        item_images.append(self.game.spritesheet.get_image(int(v[0], int(v[1]), int(v[2]), int(v[3]))))
+        
+        self.image = choice(item_images)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+    def update(self):
+        if self.rect.x >= self.endX:
+            self.rect.x = self.endX
+            self.speed = -self.speed
+        if self.rect.x <= self.startX:
+            self.rect.x = self.startX
+            self.speed = -self.speed
 
 class BrokenPlatform(Platform):
     genTime = 2147483647
