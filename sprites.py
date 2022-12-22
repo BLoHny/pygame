@@ -2,6 +2,7 @@ import pygame as pg
 from settings import *
 from random import choice
 import xml.etree.ElementTree as ET
+import random
 vec = pg.math.Vector2
 
 tree = ET.parse('img/spritesheet_jumper.xml')
@@ -135,17 +136,21 @@ class Platform(pg.sprite.Sprite):
         self.game = game
 
         images = []
+        item_images = []
         v = spriteDict["ground_grass.png"]
         images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
         v = spriteDict["ground_grass_small.png"]
         images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
+        
+        test_item = random.randrange(0, 20)
 
         self.image = choice(images)
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        
+            
+
 class MovingYPlatform(Platform):
     startY = 0
     endY = 0
