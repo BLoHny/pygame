@@ -6,13 +6,12 @@ from os import path
 import pygame, time
 
 a = 1
-
-draw_background = pg.image.load("C:\IdeaFest\pygame\img\draw_backgroud.webp")
+draw_background = pg.image.load("img/draw_backgroud.png")
 draw_background = pg.transform.scale(draw_background,(480,600))
-start_background = pg.image.load("C:\IdeaFest\pygame\img\start_background.jpg")
+start_background = pg.image.load("img/start_background.jpg")
 start_background = pg.transform.scale(start_background,(480,600))
 
-end_background = pg.image.load("C:\IdeaFest\pygame\img\end_background.jpg")
+end_background = pg.image.load("img/end_background.jpg")
 end_background = pg.transform.scale(end_background,(480,600))
 
 class Game:

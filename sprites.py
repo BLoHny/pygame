@@ -194,7 +194,7 @@ class MovingPlatform(Platform):
         self.game = game
 
         images = []
-        v = spriteDict['spring_out.png']
+        v = spriteDict['spring_in.png']
         images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
         v = spriteDict['grass_brown1.png']
         images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
@@ -217,7 +217,6 @@ class MovingPlatform(Platform):
             self.speed = -self.speed
             
 class item(Platform):
-    
     def __init__(self, game,x, y):
         pg.sprite.Sprite.__init__(self)
         self.game = game
@@ -257,6 +256,6 @@ class BrokenPlatform(Platform):
         self.rect.y = y
         
     def update(self):
-        if time.time() - self.genTime > 3:
+        if time.time() - self.genTime > 2:
             return True
         return False
