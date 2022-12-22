@@ -6,7 +6,6 @@ from os import path
 
 a = 1
 
-
 class Game:
     def __init__(self):
         pg.init()
@@ -79,6 +78,10 @@ class Game:
                     self.player.pos.y = lowest.rect.top + 0.1
                     self.player.vel.y = 0
                     self.player.jumping = False
+                    if type(lowest) is BrokenPlatform:
+                        lowest.kill()
+                        list.remove(self.platforms, lowest)
+                    
 
         # If player reached top 1/4 of screen
         if self.player.rect.top <= HEIGHT/4:
@@ -113,10 +116,16 @@ class Game:
         while pListLen is not 0 and self.player.rect.bottom - pList[pListLen - 1].rect.top < 240:
             width = random.randrange(50, 100)
             if random.randrange(0, 10) <= int(self.score / 200):
+                if random.randrange(0, 2) == 0 and self.score >= 1000:
                     startY = pList[pListLen - 1].rect.top - random.randrange(
-                            50 + min(int(self.score / 10), 189), 240)
+                        50 + min(int(self.score / 10), 189), 240)
                     p = MovingYPlatform(self, random.randrange(0, WIDTH - width),
-                                        startY, startY - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 5))
+                                        startY, startY - random.randrange(100 + min(int(self.score / 10), 189), 300), random.randrange(2, 4))
+                else:
+                    startX = random.randrange(0, WIDTH - width - 30)
+                    p = MovingPlatform(self, startX, random.randrange(startX + 10, WIDTH - width),
+                                   pList[pListLen - 1].rect.top - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 4 + int(self.score / 500)))
+
             else:
                 p = Platform(self, random.randrange(0, WIDTH - width), pList[pListLen - 1].rect.top - random.randrange(
                     50 + min(int(self.score / 10), 189), 240))
@@ -167,6 +176,7 @@ class Game:
                        str(fet.rect.y), 22, WHITE, WIDTH/2, 65 + 25)
         self.draw_text("x of last appended platform" +
                        str(fet.rect.x), 22, WHITE, WIDTH/2, 90 + 25) 
+        self.draw_text("" + str(pg.sprite.spritecollide(self.player, self.platforms, False)), 22, WHITE, WIDTH/2, 115 + 25)
 
         # *after* drawing everything, flip the display
         pg.display.flip()
