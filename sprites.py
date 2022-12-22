@@ -256,6 +256,6 @@ class BrokenPlatform(Platform):
         self.rect.y = y
         
     def update(self):
-        if time.time() - self.genTime > 2:
+        if time.time() - self.genTime > 0.67:
             return True
         return False
