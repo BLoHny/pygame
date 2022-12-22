@@ -217,7 +217,7 @@ class MovingPlatform(Platform):
             self.speed = -self.speed
 
 class BrokenPlatform(Platform):
-    genTime = 0
+    genTime = 2147483647
     def __init__(self, game, x, y):
         pg.sprite.Sprite.__init__(self)
         self.game = game
