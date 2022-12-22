@@ -81,18 +81,16 @@ class Game:
         if self.player.vel.y > 0:
             hits = pg.sprite.spritecollide(self.player, self.platforms, False)
             if hits:
-                lowest = hits[0]
+                platform = hits[0]
                 for hit in hits:
-                    if hit.rect.bottom > lowest.rect.bottom:
-                        lowest = hit
-                if self.player.pos.y < lowest.rect.centery:
-                    self.player.pos.y = lowest.rect.top + 0.1
+                    if hit.rect.bottom > platform.rect.bottom:
+                        platform = hit
+                if self.player.pos.y < platform.rect.centery:
+                    self.player.pos.y = platform.rect.top + 0.1
                     self.player.vel.y = 0
                     self.player.jumping = False
-                    if type(lowest) is BrokenPlatform:
-                        if lowest.update() : 
-                            lowest.kill()
-                            list.remove(self.platforms, lowest)
+                    if type(platform) is BrokenPlatform:
+                        if platform.genTime == 2147483647 : platform.genTime = time.time()
                     
 
         # If player reached top 1/4 of screen
@@ -129,7 +127,7 @@ class Game:
             width = random.randrange(50, 100)
             trig = random.randrange(0, 100)
             mpPer = 6 + int(self.score / 37.037)
-            bpPer = 50 + int(self.score / 25.555555555555555) 
+            bpPer = 4 + int(self.score / 25.555555555555555) 
             if trig < mpPer:
                 if random.randrange(0, 2) == 0 and self.score >= 1000:
                     startY = pList[pListLen - 1].rect.top - random.randrange(
@@ -157,6 +155,10 @@ class Game:
                 platform.update()
             if type(platform) is MovingYPlatform:
                 platform.update()
+            if type(platform) is BrokenPlatform:
+                if platform.update() : 
+                    platform.kill()
+                    list.remove(self.platforms, platform)
                     
 
     def events(self):
