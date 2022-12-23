@@ -251,3 +251,44 @@ class BrokenPlatform(Platform):
         if time.time() - self.genTime > 0.67:
             return True
         return False
+    
+class Trap(pg.sprite.Sprite):
+    def __init__(self, game, x, y, speed):
+        pg.sprite.Sprite.__init__(self)
+        self.game = game
+        self.check = True
+        
+        if x == 1:
+            x = WIDTH
+            self.check = False
+            
+            
+        
+        trap_images = []
+        v = spriteDict["particle_darkGrey.png"]
+        trap_images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
+        
+        self.image = choice(trap_images)
+        self.image.set_colorkey(BLACK)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.startx = x
+        self.speed = speed
+        
+    def update(self):
+        if self.startx == WIDTH:
+            self.speed = -self.speed
+            
+        self.rect.x += self.speed
+        
+        if self.startx == WIDTH:
+            if self.rect.x <= 0:
+                self.rect.x = WIDTH
+        
+        if self.startx == 0:
+            if self.rect.x >= WIDTH:
+                self.rect.x = 0
+                
+    def check(self):
+        return self.check

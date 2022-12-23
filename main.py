@@ -6,6 +6,7 @@ from os import path
 import pygame, time
 
 DEBUG = True
+b = True
 
 a = 1
 draw_background = pg.image.load("img/draw_backgroud.png")
@@ -105,6 +106,8 @@ class Game:
                     plat.kill()
                     list.remove(self.platforms, plat)
                     self.score += 10
+                    
+                    
 
         # Die
         if self.player.rect.bottom > HEIGHT:
@@ -172,6 +175,24 @@ class Game:
         #         self.score += 10
         #         cHit.kill()
         #         list.remove(cList, cHit)
+        
+        tList = []
+        
+        #while len(tList) < 1:
+        global b
+        if b:
+            t = Trap(self,  random.randrange(0, 1), random.randrange(10, 50), random.randrange(2, 4))
+            self.all_sprites.add(t)
+            tList.append(t)
+            b = False
+            
+        tHits = pg.sprite.spritecollide(self.player, tList, False)
+        if tHits:
+            for tHit in tHits:
+                if(tHit.check()):
+                    self.player.vel.y -= 4
+                
+                
 
         
         # check if player hits a platfrom
