@@ -48,6 +48,7 @@ class Game:
         self.score = 0
         self.all_sprites = pg.sprite.Group()
         self.platforms = []
+        self.cList = []
 
         self.player = Player(self)
         self.player.rect.x = WIDTH / 2 - 50
@@ -105,21 +106,12 @@ class Game:
                     plat.kill()
                     list.remove(self.platforms, plat)
                     self.score += 10
-
-        # Die
-        if self.player.rect.bottom > HEIGHT:
-            for sprite in self.all_sprites:
-                sprite.rect.y -= max(self.player.vel.y, 10)
-                if type(sprite) is MovingYPlatform:
-                    sprite.startY -= max(abs(self.player.vel.y), 5)
-                    sprite.endY -= max(abs(self.player.vel.y), 5)
-                if sprite.rect.bottom < 0:
-                    sprite.kill()
-                    list.remove(self.platforms, sprite)
+            for coin in self.cList:
+                coin.rect.y += max(abs(self.player.vel.y), 5)
+                # if coin.rect >= HEIGHT:
+                #     coin.kill()
+                #     list.remove(self.cList, coin)
                     
-        if len(self.platforms) <= 0:
-            self.playing = False
-
         # Spawn new platforms
         pListLen = len(self.platforms)
         pList = self.platforms
@@ -157,21 +149,39 @@ class Game:
             pListLen = len(pList)
             pList = self.platforms
             # self.score += 10
-        cList = []
         
         # #generate coin
-        # while len(cList) < 0:
-        #     c = Coin(self, random.randrange(0, WIDTH - 30), random.randrange(50 + min(int(self.score / 10), 189), 240))
-        #     self.all_sprites.add(c)
-        #     cList.append(c)
+        while len(self.cList) < 3:
+            base = 0
+            if len(self.cList) > 0:
+                base = self.cList[len(self.cList) - 1].rect.top
+            c = Coin(self, random.randrange(0, WIDTH - 30), base - random.randrange(600, 1000))
+            self.all_sprites.add(c)
+            self.cList.append(c)
         
         # # #check if player hits a coin
-        # cHits = pg.sprite.spritecollide(self.player, cList, False)
-        # if cHits:
-        #     for cHit in cHits:
-        #         self.score += 10
-        #         cHit.kill()
-        #         list.remove(cList, cHit)
+        cHits = pg.sprite.spritecollide(self.player, self.cList, False)
+        if cHits:
+            for cHit in cHits:
+                self.score += 10
+                cHit.kill()
+                list.remove(self.cList, cHit)
+
+        # Die
+        if self.player.rect.bottom > HEIGHT:
+            for sprite in self.all_sprites:
+                sprite.rect.y -= max(self.player.vel.y, 10)
+                if type(sprite) is MovingYPlatform:
+                    sprite.startY -= max(abs(self.player.vel.y), 5)
+                    sprite.endY -= max(abs(self.player.vel.y), 5)
+                if sprite.rect.bottom < 0:
+                    sprite.kill()
+                    if type(sprite) is not Coin:
+                        list.remove(self.platforms, sprite) 
+                    
+        if len(self.platforms) <= 0:
+            self.playing = False
+
 
         
         # check if player hits a platfrom
