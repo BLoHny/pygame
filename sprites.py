@@ -139,14 +139,11 @@ class Platform(pg.sprite.Sprite):
         self.game = game
 
         images = []
-        item_images = []
         v = spriteDict["ground_grass.png"]
         images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
         v = spriteDict["ground_grass_small.png"]
         images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
         
-        test_item = random.randrange(0, 20)
-
         self.image = choice(images)
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
@@ -194,7 +191,7 @@ class MovingPlatform(Platform):
         self.game = game
 
         images = []
-        v = spriteDict['spring_in.png']
+        v = spriteDict['spring_out.png']
         images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
         v = spriteDict['grass_brown1.png']
         images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
@@ -216,26 +213,21 @@ class MovingPlatform(Platform):
             self.rect.x = self.startX
             self.speed = -self.speed
             
-class item(Platform):
-    def __init__(self, game,x, y):
+class Coin(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
         pg.sprite.Sprite.__init__(self)
         self.game = game
         
         item_images = []
         v = spriteDict["silver_1.png"]
-        item_images.append(self.game.spritesheet.get_image(int(v[0], int(v[1]), int(v[2]), int(v[3]))))
+        item_images.append(self.game.spritesheet.get_image(int(v[0]), int(v[1]), int(v[2]), int(v[3])))
         
         self.image = choice(item_images)
+        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-    def update(self):
-        if self.rect.x >= self.endX:
-            self.rect.x = self.endX
-            self.speed = -self.speed
-        if self.rect.x <= self.startX:
-            self.rect.x = self.startX
-            self.speed = -self.speed
+        
 
 class BrokenPlatform(Platform):
     genTime = 2147483647

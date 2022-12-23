@@ -37,7 +37,7 @@
 	<SubTexture name="gold_4.png" x="645" y="651" width="15" height="84"/>
 	<SubTexture name="grass1.png" x="868" y="1877" width="58" height="57"/>
 	<SubTexture name="grass2.png" x="784" y="1931" width="82" height="70"/>
-	<SubTexture name="grass_brown1.png" x="534" y="1063" width="58" height="57"/>
+	<SubTexture name="grass_brown1.png" x="534" y="1063" width="58" height="114"/>
 	<SubTexture name="grass_brown2.png" x="801" y="752" width="82" height="70"/>
 	<SubTexture name="ground_cake.png" x="0" y="576" width="380" height="94"/>
 	<SubTexture name="ground_cake_broken.png" x="0" y="0" width="380" height="94"/>
@@ -93,7 +93,6 @@
 	<SubTexture name="silver_4.png" x="662" y="651" width="14" height="84"/>
 	<SubTexture name="smoke.png" x="879" y="1364" width="51" height="48"/>
 	<SubTexture name="spikeBall1.png" x="534" y="763" width="142" height="148"/>
-	<SubTexture name="spikeBall_2.png" x="464" y="1122" width="148" height="141"/>
 	<SubTexture name="spikeMan_jump.png" x="736" y="1063" width="114" height="155"/>
 	<SubTexture name="spikeMan_stand.png" x="814" y="1417" width="90" height="155"/>
 	<SubTexture name="spikeMan_walk1.png" x="704" y="1256" width="120" height="159"/>
