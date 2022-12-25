@@ -98,7 +98,7 @@ class Game:
         if self.player.rect.top <= HEIGHT/4:
             self.player.pos.y += max(abs(self.player.vel.y), 5)
             for plat in self.platforms:
-                plat.rect.y += max(abs(self.player.vel.y), 5)
+                plat.rect.y += max(abs(self.player.vel.y), 5)  
                 if type(plat) is MovingYPlatform:
                     plat.startY += max(abs(self.player.vel.y), 5)
                     plat.endY += max(abs(self.player.vel.y), 5)
