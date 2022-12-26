@@ -253,14 +253,18 @@ class BrokenPlatform(Platform):
         return False
     
 class Trap(pg.sprite.Sprite):
+    check = True
     def __init__(self, game, x, y, speed):
         pg.sprite.Sprite.__init__(self)
         self.game = game
-        self.check = True
+        
+        global check
         
         if x == 1:
             x = WIDTH
-            self.check = False
+            check = False
+        else:
+            check = True
             
             
         
@@ -275,11 +279,10 @@ class Trap(pg.sprite.Sprite):
         self.rect.y = y
         self.startx = x
         self.speed = speed
+        if self.startx == WIDTH:
+            self.speed = -speed
         
     def update(self):
-        if self.startx == WIDTH:
-            self.speed = -self.speed
-            
         self.rect.x += self.speed
         
         if self.startx == WIDTH:
@@ -289,6 +292,3 @@ class Trap(pg.sprite.Sprite):
         if self.startx == 0:
             if self.rect.x >= WIDTH:
                 self.rect.x = 0
-                
-    def check(self):
-        return self.check
