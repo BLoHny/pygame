@@ -199,7 +199,7 @@ class MovingPlatform(Platform):
         self.image = choice(images)
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-        self.rect.x = startX + 1
+        self.rect.x = random.randrange(startX, endX)
         self.startx = startX
         self.endX = endX
         self.rect.y = y
@@ -286,9 +286,9 @@ class Trap(pg.sprite.Sprite):
         self.rect.x += self.speed
         
         if self.startx == WIDTH:
-            if self.rect.x <= 0:
+            if self.rect.x <= -WIDTH:
                 self.rect.x = WIDTH
         
         if self.startx == 0:
-            if self.rect.x >= WIDTH:
+            if self.rect.x >= WIDTH * 2:
                 self.rect.x = 0

@@ -83,6 +83,7 @@ class Game:
         pg.mixer.music.fadeout(500)
 
     def update(self):
+        print(self.tList)
         if self.score < 0 : self.score = 0
         mhits = []
         
@@ -115,7 +116,7 @@ class Game:
                     self.score += 10
             for coin in self.cList:
                 coin.rect.y += max(abs(self.player.vel.y), 5)
-                if coin.rect >= HEIGHT:
+                if coin.rect.y >= HEIGHT:
                     coin.kill()
                     list.remove(self.cList, coin)
             
@@ -143,14 +144,20 @@ class Game:
             mpPer = 6 + int(self.score / 37.037)
             bpPer = 4 + int(self.score / 25.555555555555555) 
             if trig < mpPer:
-                if random.randrange(0, 2) == 0 and self.score >= 500:
+                if random.randrange(0, 2) == 0 and self.score >= 1000:
                     startY = pTopVal - random.randrange(
                         50 + min(int(self.score / 10), 59), 110)
                     p = MovingYPlatform(self, random.randrange(0, WIDTH - width),
                                         startY, startY - random.randrange(100 + min(int(self.score / 10), 189), 300), random.randrange(2, 4))
                 else:
-                    startX = random.randrange(0, WIDTH - width - 30)
-                    p = MovingPlatform(self, startX, random.randrange(startX + 10, WIDTH - width),
+                    cent = random.randrange(30, WIDTH - 60)
+                    valWeight = random.randrange(30, 370)
+                    
+                    startX = cent - valWeight
+                    endX = cent + valWeight
+                    if startX < 0 : startX = 0
+                    if endX > WIDTH - 30 : endX = WIDTH - 30
+                    p = MovingPlatform(self, startX, endX,
                                    pTopVal - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 4 + int(self.score / 500)))
             elif trig < mpPer + bpPer:
                 p = BrokenPlatform(self, random.randrange(0, WIDTH - width), pTopVal - random.randrange(
@@ -184,24 +191,23 @@ class Game:
                 list.remove(self.cList, cHit)
                 
                 
-        
-        #while len(tList) < 1:
-        global b
-        if b:
-            t = Trap(self, random.randrange(0, 2), random.randrange(10, 50), random.randrange(8, 15))
+        while len(self.tList) < 2 and self.score > 500:
+            base = 0
+            if len(self.tList) > 0:
+                base = self.tList[len(self.tList) - 1].rect.top
+            t = Trap(self, random.randrange(0, 2), base - random.randrange(100, 500), random.randrange(8, 15))
             self.all_sprites.add(t) 
             self.tList.append(t)
             b = False
             
         tHits = pg.sprite.spritecollide(self.player, self.tList, False)
         if tHits: 
-            trap = tHits[0]
             for tHit in tHits:
-                if(type(trap) is Trap):
-                    if(trap.check):
-                        self.player.vel.x += 10
+                if(type(tHit) is Trap):
+                    if(tHit.check):
+                        self.player.vel.x += tHit.speed
                     else:
-                        self.player.vel.x -= 10
+                        self.player.vel.x -= tHit.speed
 
         # Die
         if self.player.rect.bottom > HEIGHT:
@@ -212,16 +218,16 @@ class Game:
                     sprite.endY -= max(abs(self.player.vel.y), 5)
                 if sprite.rect.bottom < 0:
                     sprite.kill()
-                    if type(sprite) is not Coin:
-                        list.remove(self.platforms, sprite) 
-                    if type(sprite) is not Trap:
+                    if type(sprite) is Trap:
+                        list.remove(self.tList, sprite) 
+                    elif type(sprite) is Coin:
+                        list.remove(self.cList, sprite) 
+                    else:
                         list.remove(self.platforms, sprite) 
                     
         if len(self.platforms) <= 0:
             self.playing = False
 
-
-        
         # check if player hits a platfrom
         if self.player.vel.y > 0:
             hits = pg.sprite.spritecollide(self.player, self.platforms, False)
