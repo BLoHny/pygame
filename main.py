@@ -6,7 +6,7 @@ from os import path
 import time
 import sys
 
-DEBUG = True
+DEBUG = False
 b = True
 
 a = 1
