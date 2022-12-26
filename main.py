@@ -164,7 +164,7 @@ class Game:
                                         startY, startY - random.randrange(100 + min(int(self.score / 10), 189), 300), random.randrange(2, 4))
                 else:
                     cent = random.randrange(30, WIDTH - 60)
-                    valWeight = random.randrange(10, 195)
+                    valWeight = random.randrange(30, 195)
                     
                     startX = cent - valWeight
                     endX = cent + valWeight
@@ -391,9 +391,9 @@ class Game:
                     elif event.key == pg.K_RETURN:
                         if self.mn == 0: return
                     elif event.key == pg.K_LEFT:
-                        if self.mn == 1 and BGMVOLUME > 0.0:
+                        if self.mn == 1 and BGMVOLUME >= 0.1:
                             BGMVOLUME -= 0.1
-                        elif self.mn == 2 and SFXVOLUME > 0.0:
+                        elif self.mn == 2 and SFXVOLUME >= 0.1:
                             SFXVOLUME -= 0.1
                     elif event.key == pg.K_RIGHT:
                         if self.mn == 1 and BGMVOLUME < 1.0:
