@@ -18,6 +18,20 @@ start_background = pg.transform.scale(start_background,(480,600))
 end_background = pg.image.load("img/end_background.jpg")
 end_background = pg.transform.scale(end_background,(480,600))
 
+
+class UIModule:
+    x = 0
+    y = 0
+    text = "default text"
+    color = WHITE
+    fontSize = 22
+    def __init__(self, inX, inY, inText, inColor, inFontSize):
+        self.x = inX
+        self.y = inY
+        self.text = inText
+        self.color = inColor
+        self.fontSize = inFontSize
+
 class Game:
     def __init__(self):
         pg.init()
@@ -157,7 +171,7 @@ class Game:
                     if startX < 0 : startX = 0
                     if endX > WIDTH - 30 : endX = WIDTH - 30
                     p = MovingPlatform(self, startX, endX,
-                                   pTopVal - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(2, 4 + int(self.score / 500)))
+                                   pTopVal - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(3, 6 + int(self.score / 500)))
             elif trig < mpPer + bpPer:
                 p = BrokenPlatform(self, random.randrange(0, WIDTH - width), pTopVal - random.randrange(
                     50 + min(int(self.score / 10), 189), 240))
@@ -194,7 +208,7 @@ class Game:
             base = 0
             if len(self.tList) > 0:
                 base = self.tList[len(self.tList) - 1].rect.top
-            t = Trap(self, random.randrange(0, 2), base - random.randrange(500, 1000), random.randrange(8, 15))
+            t = Trap(self, random.randrange(0, 2), base - random.randrange(500, 1000), random.randrange(6, 13))
             self.all_sprites.add(t) 
             self.tList.append(t)
             b = False
@@ -286,39 +300,44 @@ class Game:
 
         # *after* drawing everything, flip the display
         pg.display.flip()
-
+            
+    
     mn = 0
     def show_start_screen(self):
         self.mn = 0
+        ui = []
+        interactable = []
+        ui.append(UIModule(WIDTH/2, HEIGHT/4, TITLE, WHITE, 48))
+        ui.append(UIModule(WIDTH/2, HEIGHT/2, "Arrows to move, Space to jump", WHITE, 22))
+        ui.append(UIModule(WIDTH/2, HEIGHT * 3/4, "Start", WHITE, 22))
+        ui.append(UIModule(WIDTH/2, HEIGHT * 3/4 + 25, "Options", WHITE, 22))
+        ui.append(UIModule(WIDTH/2, HEIGHT * 3/4 + 25 + 25, "Quit", WHITE, 22))
+        ui.append(UIModule(WIDTH/2, 15, "High Score : " + str(self.highscore), WHITE, 22))
+        
+        
+        interactable.append(UIModule(WIDTH/2, HEIGHT * 3/4, "Start", WHITE, 22))
+        interactable.append(UIModule(WIDTH/2, HEIGHT * 3/4 + 25, "Options", WHITE, 22))
+        interactable.append(UIModule(WIDTH/2, HEIGHT * 3/4 + 25 + 25, "Quit", WHITE, 22))
         # game splash/start screen
         # self.screen.blit(start_background,(0,0))
         while True:
             self.screen.fill(BGCOLOR)
-            self.draw_text(TITLE, 48, WHITE, WIDTH/2, HEIGHT/4)
-            self.draw_text("Arrows to move, Space to jump",
-                        22, WHITE, WIDTH/2, HEIGHT/2)
-            self.draw_text("Start",
-                        22, WHITE, WIDTH/2, HEIGHT*3/4)
-            self.draw_text("Options",
-                        22, WHITE, WIDTH/2, HEIGHT*3/4 + 25)
-            self.draw_text("Quit",
-                        22, WHITE, WIDTH/2, HEIGHT*3/4 + 50)
-            self.draw_text("High Score : " + str(self.highscore),
-                        22, WHITE, WIDTH/2, 15)
+            for m in ui:
+                self.draw_text(m.text, m.fontSize, m.color, m.x, m.y)
             font = pg.font.SysFont('notosansmonocjkkrregular',22)
             cur = font.render('>', True, WHITE)
-            self.screen.blit(cur, (WIDTH/2 - 45, HEIGHT*3/4 + 5 + self.mn * 25))
+            self.screen.blit(cur, (WIDTH/2 - 45, 5 + interactable[self.mn].y))
             pg.display.flip()
             for event in pg.event.get():
                 # check for closing window
-                if event.type == pg.QUIT:
-                    if self.playing:
-                        self.playing = False    
+                if event.type == pg.QUIT:   
                     self.running = False
+                    pg.quit()
+                    sys.exit()
                 elif event.type == pg.KEYDOWN:
                     if event.key == pg.K_UP and self.mn > 0:
                         self.mn -= 1
-                    elif event.key == pg.K_DOWN and self.mn < 2:
+                    elif event.key == pg.K_DOWN and self.mn < interactable.__len__() - 1:
                         self.mn += 1
                     elif event.key == pg.K_RETURN:
                         if self.mn == 0: return
@@ -330,23 +349,33 @@ class Game:
                         
     def show_option_screen(self):
         self.mn = 0
+        ui = []
+        interactable = []
         global BGMVOLUME
         global SFXVOLUME
+        ui.append(UIModule(WIDTH/2 - 150, HEIGHT * 1/6, "Exit Settings", WHITE, 22))
+        ui.append(UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 25, "Music Volume", WHITE, 22))
+        ui.append(UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 75, "SFX Volume", WHITE, 22))
+        
+        
+        interactable.append(UIModule(WIDTH/2 - 150, HEIGHT * 1/6, "Exit Settings", WHITE, 22))
+        interactable.append(UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 25, "Music Volume", WHITE, 22))
+        interactable.append(UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 75, "SFX Volume", WHITE, 22))
+        
         while True:
             self.screen.fill(BGCOLOR)
-            self.draw_text("Exit Settings",
-                        22, WHITE, WIDTH/2 - 150, HEIGHT*1/6)
-            self.draw_text("Music Volume",
-                        22, WHITE, WIDTH/2 - 150, HEIGHT*1/6 + 25)
+            for m in ui:
+                self.draw_text(m.text, m.fontSize, m.color, m.x, m.y)
             for i in range(0, int(BGMVOLUME * 100)):
                 self.draw_text(".", 22, WHITE, WIDTH/2 - 150 + i * 2, HEIGHT*1/6 + 50)
-            self.draw_text("SFX Volume",
-                        22, WHITE, WIDTH/2 - 150, HEIGHT*1/6 + 75)
+            self.draw_text(str(int(BGMVOLUME * 100)), 22, WHITE, 60, HEIGHT*1/6 + 50)
             for i in range(0, int(SFXVOLUME * 100)):
                 self.draw_text(".", 22, WHITE, WIDTH/2 - 150 + i * 2, HEIGHT*1/6 + 100)
+            self.draw_text(str(int(SFXVOLUME * 100)), 22, WHITE, 60, HEIGHT*1/6 + 100)
+            
             font = pg.font.SysFont('notosansmonocjkkrregular',22)
             cur = font.render('>', True, WHITE)
-            self.screen.blit(cur, (20, HEIGHT*1/6 + 5 + self.mn * 25))
+            self.screen.blit(cur, (20, 5 + interactable[self.mn].y))
             pg.display.flip()
             for event in pg.event.get():
                 # check for closing window
