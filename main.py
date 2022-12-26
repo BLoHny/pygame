@@ -6,7 +6,7 @@ from os import path
 import time
 import sys
 
-DEBUG = True
+DEBUG = False
 b = True
 
 a = 1
@@ -114,6 +114,7 @@ class Game:
                 platform.update()
             if type(platform) is BrokenPlatform:
                 if platform.update():
+                    self.score += 10
                     platform.kill()
                     list.remove(self.platforms, platform)
 
