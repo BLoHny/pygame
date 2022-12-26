@@ -200,7 +200,7 @@ class MovingPlatform(Platform):
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(startX, endX)
-        self.startx = startX
+        self.startX = startX
         self.endX = endX
         self.rect.y = y
         self.speed = speed

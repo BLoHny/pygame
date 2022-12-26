@@ -83,7 +83,6 @@ class Game:
         pg.mixer.music.fadeout(500)
 
     def update(self):
-        print(self.tList)
         if self.score < 0 : self.score = 0
         mhits = []
         
@@ -151,7 +150,7 @@ class Game:
                                         startY, startY - random.randrange(100 + min(int(self.score / 10), 189), 300), random.randrange(2, 4))
                 else:
                     cent = random.randrange(30, WIDTH - 60)
-                    valWeight = random.randrange(30, 370)
+                    valWeight = random.randrange(10, 195)
                     
                     startX = cent - valWeight
                     endX = cent + valWeight
@@ -195,7 +194,7 @@ class Game:
             base = 0
             if len(self.tList) > 0:
                 base = self.tList[len(self.tList) - 1].rect.top
-            t = Trap(self, random.randrange(0, 2), base - random.randrange(100, 500), random.randrange(8, 15))
+            t = Trap(self, random.randrange(0, 2), base - random.randrange(500, 1000), random.randrange(8, 15))
             self.all_sprites.add(t) 
             self.tList.append(t)
             b = False
