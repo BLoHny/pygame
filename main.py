@@ -49,7 +49,6 @@ class Game:
         self.score = 0
         self.all_sprites = pg.sprite.Group()
         self.platforms = []
-        self.cList = []
 
         self.player = Player(self)
         self.player.rect.x = WIDTH / 2 - 50
@@ -116,6 +115,7 @@ class Game:
         # Spawn new platforms
         pListLen = len(self.platforms)
         pList = self.platforms
+        
         while pListLen != 0 and self.player.rect.bottom - pList[pListLen - 1].rect.top < 240:
             if type(pList[pListLen - 1]) is not MovingYPlatform:
                 pTopVal = pList[pListLen - 1].rect.top
@@ -300,9 +300,12 @@ class Game:
         #self.screen.fill(BGCOLOR)
         self.screen.blit(end_background,(0,0))
         self.gameover_sound.play()
+        p = self.score
+        if p == -10 or p < 0:
+           p += 10
 
         #self.draw_text("GAME OVER", 48, WHITE, WIDTH/2, HEIGHT/4)
-        self.draw_text("Score : " + str(self.score),
+        self.draw_text("Score : " + str(p),
                        22, BLACK,WIDTH/2, HEIGHT/1/12)
         self.draw_text("Press a key to play again",
                        22, BLACK, WIDTH/2, HEIGHT*10/12)
@@ -339,7 +342,6 @@ class Game:
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
         self.screen.blit(text_surface, text_rect)
-
 
 g = Game()
 g.show_start_screen()
