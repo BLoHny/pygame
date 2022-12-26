@@ -11,12 +11,12 @@ b = True
 
 a = 1
 draw_background = pg.image.load("img/draw_backgroud.png")
-draw_background = pg.transform.scale(draw_background,(480,600))
+draw_background = pg.transform.scale(draw_background, (480, 600))
 start_background = pg.image.load("img/start_background.jpg")
-start_background = pg.transform.scale(start_background,(480,600))
+start_background = pg.transform.scale(start_background, (480, 600))
 
 end_background = pg.image.load("img/end_background.jpg")
-end_background = pg.transform.scale(end_background,(480,600))
+end_background = pg.transform.scale(end_background, (480, 600))
 
 
 class UIModule:
@@ -25,12 +25,14 @@ class UIModule:
     text = "default text"
     color = WHITE
     fontSize = 22
+
     def __init__(self, inX, inY, inText, inColor, inFontSize):
         self.x = inX
         self.y = inY
         self.text = inText
         self.color = inColor
         self.fontSize = inFontSize
+
 
 class Game:
     def __init__(self):
@@ -97,11 +99,12 @@ class Game:
         pg.mixer.music.fadeout(500)
 
     def update(self):
-        if self.score < 0 : self.score = 0
+        if self.score < 0:
+            self.score = 0
         mhits = []
-        
+
         # Game Loop - Update
-        #update special platforms
+        # update special platforms
         for platform in self.platforms:
             if type(platform) is MovingPlatform:
                 platform.update()
@@ -110,16 +113,16 @@ class Game:
                     mhits.append(platform)
                 platform.update()
             if type(platform) is BrokenPlatform:
-                if platform.update() : 
+                if platform.update():
                     platform.kill()
                     list.remove(self.platforms, platform)
-        
+
         self.all_sprites.update()
         # If player reached top 1/4 of screen
         if self.player.rect.top <= HEIGHT/4:
             self.player.pos.y += max(abs(self.player.vel.y), 5)
             for plat in self.platforms:
-                plat.rect.y += max(abs(self.player.vel.y), 5)  
+                plat.rect.y += max(abs(self.player.vel.y), 5)
                 if type(plat) is MovingYPlatform:
                     plat.startY += max(abs(self.player.vel.y), 5)
                     plat.endY += max(abs(self.player.vel.y), 5)
@@ -132,17 +135,17 @@ class Game:
                 if coin.rect.y >= HEIGHT:
                     coin.kill()
                     list.remove(self.cList, coin)
-            
+
             for trap in self.tList:
                 trap.rect.y += max(abs(self.player.vel.y), 5)
                 if trap.rect.top >= HEIGHT:
                     trap.kill()
                     list.remove(self.tList, trap)
-                    
+
         # Spawn new platforms
         pListLen = len(self.platforms)
         pList = self.platforms
-        
+
         while pListLen != 0 and self.player.rect.bottom - pList[pListLen - 1].rect.top < 240:
             if type(pList[pListLen - 1]) is not MovingYPlatform:
                 pTopVal = pList[pListLen - 1].rect.top
@@ -155,7 +158,7 @@ class Game:
             width = random.randrange(50, 100)
             trig = random.randrange(0, 100)
             mpPer = 6 + int(self.score / 37.037)
-            bpPer = 4 + int(self.score / 25.555555555555555) 
+            bpPer = 4 + int(self.score / 25.555555555555555)
             if trig < mpPer:
                 if random.randrange(0, 2) == 0 and self.score >= 1000:
                     startY = pTopVal - random.randrange(
@@ -163,15 +166,17 @@ class Game:
                     p = MovingYPlatform(self, random.randrange(0, WIDTH - width),
                                         startY, startY - random.randrange(100 + min(int(self.score / 10), 189), 300), random.randrange(2, 4))
                 else:
-                    cent = random.randrange(30, WIDTH - 60)
-                    valWeight = random.randrange(30, 195)
-                    
+                    cent = random.randrange(60, WIDTH - 90)
+                    valWeight = random.randrange(60, 195)
+
                     startX = cent - valWeight
                     endX = cent + valWeight
-                    if startX < 0 : startX = 0
-                    if endX > WIDTH - 30 : endX = WIDTH - 30
+                    if startX < 0:
+                        startX = 0
+                    if endX > WIDTH - 30:
+                        endX = WIDTH - 30
                     p = MovingPlatform(self, startX, endX,
-                                   pTopVal - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(3, 6 + int(self.score / 500)))
+                                       pTopVal - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(3, 6 + int(self.score / 500)))
             elif trig < mpPer + bpPer:
                 p = BrokenPlatform(self, random.randrange(0, WIDTH - width), pTopVal - random.randrange(
                     50 + min(int(self.score / 10), 189), 240))
@@ -183,7 +188,7 @@ class Game:
             pListLen = len(pList)
             pList = self.platforms
             # self.score += 10
-        
+
         # #generate coin
         while len(self.cList) < 3:
             base = 0
@@ -191,10 +196,11 @@ class Game:
                 base = self.cList[len(self.cList) - 1].rect.top
             else:
                 base = self.platforms[len(self.platforms) - 1].rect.top
-            c = Coin(self, random.randrange(0, WIDTH - 30), base - random.randrange(1000, 1600))
+            c = Coin(self, random.randrange(0, WIDTH - 30),
+                     base - random.randrange(1000, 1600))
             self.all_sprites.add(c)
             self.cList.append(c)
-        
+
         # # #check if player hits a coin
         cHits = pg.sprite.spritecollide(self.player, self.cList, False)
         if cHits:
@@ -202,22 +208,22 @@ class Game:
                 self.score += 10
                 cHit.kill()
                 list.remove(self.cList, cHit)
-                
-                
+
         while len(self.tList) < 2 and self.score > 500:
             base = 0
             if len(self.tList) > 0:
                 base = self.tList[len(self.tList) - 1].rect.top
-            t = Trap(self, random.randrange(0, 2), base - random.randrange(500, 1000), random.randrange(6, 13))
-            self.all_sprites.add(t) 
+            t = Trap(self, random.randrange(0, 2), base -
+                     random.randrange(500, 1000), random.randrange(6, 13))
+            self.all_sprites.add(t)
             self.tList.append(t)
             b = False
-            
+
         tHits = pg.sprite.spritecollide(self.player, self.tList, False)
-        if tHits: 
+        if tHits:
             for tHit in tHits:
-                if(type(tHit) is Trap):
-                    if(tHit.check):
+                if (type(tHit) is Trap):
+                    if (tHit.check):
                         self.player.vel.x += tHit.speed
                     else:
                         self.player.vel.x -= tHit.speed
@@ -232,12 +238,12 @@ class Game:
                 if sprite.rect.bottom < 0:
                     sprite.kill()
                     if type(sprite) is Trap:
-                        list.remove(self.tList, sprite) 
+                        list.remove(self.tList, sprite)
                     elif type(sprite) is Coin:
-                        list.remove(self.cList, sprite) 
+                        list.remove(self.cList, sprite)
                     else:
-                        list.remove(self.platforms, sprite) 
-                    
+                        list.remove(self.platforms, sprite)
+
         if len(self.platforms) <= 0:
             self.playing = False
 
@@ -255,7 +261,8 @@ class Game:
                     self.player.vel.y = 0
                     self.player.jumping = False
                     if type(platform) is BrokenPlatform:
-                        if platform.genTime == 2147483647 : platform.genTime = time.time()
+                        if platform.genTime == 2147483647:
+                            platform.genTime = time.time()
 
     def events(self):
         # Game Loop - Events
@@ -267,11 +274,11 @@ class Game:
                 self.running = False
 
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
+                if event.key == KEY_JUMP:
                     if self.player.jump():
                         self.jump_sound.play()
             if event.type == pg.KEYUP:
-                if event.key == pg.K_SPACE:
+                if event.key == KEY_JUMP:
                     self.player.jump_cut()
 
     def draw(self):
@@ -281,99 +288,124 @@ class Game:
             fet = Platform(self, 0, 0)
         self.platforms.append(fet)
         # Game Loop - Draw
-        #self.screen.fill(BGCOLOR)
-        
-        self.screen.blit(draw_background,(0,0))
+        # self.screen.fill(BGCOLOR)
+
+        self.screen.blit(draw_background, (0, 0))
         self.all_sprites.draw(self.screen)
         self.screen.blit(self.player.image, self.player.rect)
         self.draw_text(str(self.score), 22, WHITE, WIDTH/2, 15)
         if DEBUG:
             self.draw_text("player y" +
-                       str(self.player.rect.y), 22, WHITE, WIDTH/2, 40)
+                           str(self.player.rect.y), 22, WHITE, WIDTH/2, 40)
             self.draw_text("player x" +
-                       str(self.player.rect.x), 22, WHITE, WIDTH/2, 40 + 25)
+                           str(self.player.rect.x), 22, WHITE, WIDTH/2, 40 + 25)
             self.draw_text("y of last appended platform" +
-                       str(fet.rect.y), 22, WHITE, WIDTH/2, 65 + 25)
+                           str(fet.rect.y), 22, WHITE, WIDTH/2, 65 + 25)
             self.draw_text("x of last appended platform" +
-                       str(fet.rect.x), 22, WHITE, WIDTH/2, 90 + 25) 
-            self.draw_text("" + str(pg.sprite.spritecollide(self.player, self.platforms, False)), 22, WHITE, WIDTH/2, 115 + 25)
+                           str(fet.rect.x), 22, WHITE, WIDTH/2, 90 + 25)
+            self.draw_text("" + str(pg.sprite.spritecollide(self.player,
+                           self.platforms, False)), 22, WHITE, WIDTH/2, 115 + 25)
 
         # *after* drawing everything, flip the display
         pg.display.flip()
-            
-    
+
     mn = 0
+
     def show_start_screen(self):
         self.mn = 0
         ui = []
         interactable = []
         ui.append(UIModule(WIDTH/2, HEIGHT/4, TITLE, WHITE, 48))
-        ui.append(UIModule(WIDTH/2, HEIGHT/2, "Arrows to move, Space to jump", WHITE, 22))
+        ui.append(UIModule(WIDTH/2, HEIGHT/2,
+                  "Arrows to move, Space to jump", WHITE, 22))
         ui.append(UIModule(WIDTH/2, HEIGHT * 3/4, "Start", WHITE, 22))
         ui.append(UIModule(WIDTH/2, HEIGHT * 3/4 + 25, "Options", WHITE, 22))
         ui.append(UIModule(WIDTH/2, HEIGHT * 3/4 + 25 + 25, "Quit", WHITE, 22))
-        ui.append(UIModule(WIDTH/2, 15, "High Score : " + str(self.highscore), WHITE, 22))
-        
-        
-        interactable.append(UIModule(WIDTH/2, HEIGHT * 3/4, "Start", WHITE, 22))
-        interactable.append(UIModule(WIDTH/2, HEIGHT * 3/4 + 25, "Options", WHITE, 22))
-        interactable.append(UIModule(WIDTH/2, HEIGHT * 3/4 + 25 + 25, "Quit", WHITE, 22))
+        ui.append(UIModule(WIDTH/2, 15, "High Score : " +
+                  str(self.highscore), WHITE, 22))
+
+        interactable.append(
+            UIModule(WIDTH/2, HEIGHT * 3/4, "Start", WHITE, 22))
+        interactable.append(UIModule(WIDTH/2, HEIGHT * 3 /
+                            4 + 25, "Options", WHITE, 22))
+        interactable.append(UIModule(WIDTH/2, HEIGHT * 3 /
+                            4 + 25 + 25, "Quit", WHITE, 22))
         # game splash/start screen
-        # self.screen.blit(start_background,(0,0))
         while True:
-            self.screen.fill(BGCOLOR)
+            # self.screen.fill(BGCOLOR)
+            self.screen.blit(draw_background, (0, 0))
             for m in ui:
                 self.draw_text(m.text, m.fontSize, m.color, m.x, m.y)
-            font = pg.font.SysFont('notosansmonocjkkrregular',22)
+            font = pg.font.SysFont('notosansmonocjkkrregular', 22)
             cur = font.render('>', True, WHITE)
             self.screen.blit(cur, (WIDTH/2 - 45, 5 + interactable[self.mn].y))
             pg.display.flip()
             for event in pg.event.get():
                 # check for closing window
-                if event.type == pg.QUIT:   
+                if event.type == pg.QUIT:
                     self.running = False
                     pg.quit()
                     sys.exit()
                 elif event.type == pg.KEYDOWN:
-                    if event.key == pg.K_UP and self.mn > 0:
+                    if event.key == KEY_UP and self.mn > 0:
                         self.mn -= 1
-                    elif event.key == pg.K_DOWN and self.mn < interactable.__len__() - 1:
+                    elif event.key == KEY_DOWN and self.mn < interactable.__len__() - 1:
                         self.mn += 1
-                    elif event.key == pg.K_RETURN:
-                        if self.mn == 0: return
-                        elif self.mn == 1: self.show_option_screen()
-                        elif self.mn == 2:  
+                    elif event.key == KEY_ENTER:
+                        if self.mn == 0:
+                            return
+                        elif self.mn == 1:
+                            self.show_option_screen()
+                        elif self.mn == 2:
                             self.running = False
                             pg.quit()
                             sys.exit()
-                        
+
     def show_option_screen(self):
+        global KEY_LEFT
+        global KEY_RIGHT
+        global KEY_UP
+        global KEY_DOWN
+        global KEY_ENTER
+        global KEY_JUMP
         self.mn = 0
         ui = []
         interactable = []
         global BGMVOLUME
         global SFXVOLUME
-        ui.append(UIModule(WIDTH/2 - 150, HEIGHT * 1/6, "Exit Settings", WHITE, 22))
-        ui.append(UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 25, "Music Volume", WHITE, 22))
-        ui.append(UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 75, "SFX Volume", WHITE, 22))
-        
-        
-        interactable.append(UIModule(WIDTH/2 - 150, HEIGHT * 1/6, "Exit Settings", WHITE, 22))
-        interactable.append(UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 25, "Music Volume", WHITE, 22))
-        interactable.append(UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 75, "SFX Volume", WHITE, 22))
-        
+        ui.append(UIModule(WIDTH/2 - 150, HEIGHT *
+                  1/6, "Exit Settings", WHITE, 22))
+        ui.append(UIModule(WIDTH/2 - 150, HEIGHT * 1 /
+                  6 + 30, "Music Volume", WHITE, 22))
+        ui.append(UIModule(WIDTH/2 - 150, HEIGHT *
+                  1/6 + 90, "SFX Volume", WHITE, 22))
+
+        interactable.append(
+            UIModule(WIDTH/2 - 150, HEIGHT * 1/6, "Exit Settings", WHITE, 22))
+        interactable.append(
+            UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 30, "Music Volume", WHITE, 22))
+        interactable.append(
+            UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 90, "SFX Volume", WHITE, 22))
+
         while True:
             self.screen.fill(BGCOLOR)
             for m in ui:
                 self.draw_text(m.text, m.fontSize, m.color, m.x, m.y)
-            for i in range(0, int(BGMVOLUME * 100)):
-                self.draw_text(".", 22, WHITE, WIDTH/2 - 150 + i * 2, HEIGHT*1/6 + 50)
-            self.draw_text(str(int(BGMVOLUME * 100)), 22, WHITE, 60, HEIGHT*1/6 + 50)
-            for i in range(0, int(SFXVOLUME * 100)):
-                self.draw_text(".", 22, WHITE, WIDTH/2 - 150 + i * 2, HEIGHT*1/6 + 100)
-            self.draw_text(str(int(SFXVOLUME * 100)), 22, WHITE, 60, HEIGHT*1/6 + 100)
-            
-            font = pg.font.SysFont('notosansmonocjkkrregular',22)
+            pg.draw.line(self.screen, WHITE, [WIDTH/2 - 150, HEIGHT*1/6 + 70], [
+                         WIDTH/2 - 150 + int(BGMVOLUME * 100) * 2, HEIGHT*1/6 + 70], 2)
+            self.draw_text(str(int(BGMVOLUME * 100)), 22,
+                           WHITE, 60, HEIGHT*1/6 + 60)
+            pg.draw.line(self.screen, WHITE, [WIDTH/2 - 150, HEIGHT*1/6 + 130], [
+                         WIDTH/2 - 150 + int(SFXVOLUME * 100) * 2, HEIGHT*1/6 + 130], 2)
+            self.draw_text(str(int(SFXVOLUME * 100)), 22,
+                           WHITE, 60, HEIGHT*1/6 + 120)
+
+            pg.draw.line(self.screen, WHITE, [
+                         20, HEIGHT*1/6 + 30], [460, HEIGHT*1/6 + 30], 2)
+            pg.draw.line(self.screen, WHITE, [
+                         20, HEIGHT*1/6 + 90], [460, HEIGHT*1/6 + 90], 2)
+
+            font = pg.font.SysFont('notosansmonocjkkrregular', 22)
             cur = font.render('>', True, WHITE)
             self.screen.blit(cur, (20, 5 + interactable[self.mn].y))
             pg.display.flip()
@@ -381,21 +413,24 @@ class Game:
                 # check for closing window
                 if event.type == pg.QUIT:
                     if self.playing:
-                        self.playing = False    
+                        self.playing = False
                     self.running = False
+                    pg.quit()
+                    sys.exit()
                 elif event.type == pg.KEYDOWN:
-                    if event.key == pg.K_UP and self.mn > 0:
+                    if event.key == KEY_UP and self.mn > 0:
                         self.mn -= 1
-                    elif event.key == pg.K_DOWN and self.mn < 2:
+                    elif event.key == KEY_DOWN and self.mn < interactable.__len__() - 1:
                         self.mn += 1
-                    elif event.key == pg.K_RETURN:
-                        if self.mn == 0: return
-                    elif event.key == pg.K_LEFT:
+                    elif event.key == KEY_ENTER:
+                        if self.mn == 0:
+                            return
+                    elif event.key == KEY_LEFT:
                         if self.mn == 1 and BGMVOLUME >= 0.1:
                             BGMVOLUME -= 0.1
                         elif self.mn == 2 and SFXVOLUME >= 0.1:
                             SFXVOLUME -= 0.1
-                    elif event.key == pg.K_RIGHT:
+                    elif event.key == KEY_RIGHT:
                         if self.mn == 1 and BGMVOLUME < 1.0:
                             BGMVOLUME += 0.1
                         elif self.mn == 2 and SFXVOLUME < 1.0:
@@ -405,16 +440,16 @@ class Game:
         # game over/continue
         if not self.running:
             return
-        #self.screen.fill(BGCOLOR)
-        self.screen.blit(end_background,(0,0))
+        # self.screen.fill(BGCOLOR)
+        self.screen.blit(end_background, (0, 0))
         self.gameover_sound.play()
         p = self.score
         if p == -10 or p < 0:
-           p += 10
+            p += 10
 
-        #self.draw_text("GAME OVER", 48, WHITE, WIDTH/2, HEIGHT/4)
+        # self.draw_text("GAME OVER", 48, WHITE, WIDTH/2, HEIGHT/4)
         self.draw_text("Score : " + str(p),
-                       22, BLACK,WIDTH/2, HEIGHT/1/12)
+                       22, BLACK, WIDTH/2, HEIGHT/1/12)
         self.draw_text("Press a key to play again",
                        22, BLACK, WIDTH/2, HEIGHT*10/12)
 
@@ -450,6 +485,7 @@ class Game:
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
         self.screen.blit(text_surface, text_rect)
+
 
 g = Game()
 g.show_start_screen()

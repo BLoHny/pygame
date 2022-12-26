@@ -1,3 +1,4 @@
+import pygame as pg
 # game options/settings
 TITLE = "Jumpy"
 WIDTH = 480
@@ -33,3 +34,11 @@ BGCOLOR = LIGHTBLUE
 #볼륨
 SFXVOLUME = 1.0
 BGMVOLUME = 1.0
+
+#조작키
+KEY_LEFT = pg.K_LEFT
+KEY_RIGHT = pg.K_RIGHT
+KEY_UP = pg.K_UP
+KEY_DOWN = pg.K_DOWN
+KEY_ENTER = pg.K_RETURN
+KEY_JUMP = pg.K_SPACE

@@ -82,9 +82,9 @@ class Player(pg.sprite.Sprite):
         self.acc = vec(0, PLAYER_GRAVITY)
         keys = pg.key.get_pressed()
 
-        if keys[pg.K_LEFT]:
+        if keys[KEY_LEFT]:
             self.acc.x = -PLAYER_ACC
-        if keys[pg.K_RIGHT]:
+        if keys[KEY_RIGHT]:
             self.acc.x = PLAYER_ACC
 
         self.acc.x += self.vel.x*PLAYER_FRICTION
