@@ -176,7 +176,7 @@ class Game:
                     if endX > WIDTH - 30:
                         endX = WIDTH - 30
                     p = MovingPlatform(self, startX, endX,
-                                       pTopVal - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(3, 6 + int(self.score / 500)))
+                                       pTopVal - random.randrange(50 + min(int(self.score / 10), 189), 240), random.randrange(3, 5 + int(self.score / 400)))
             elif trig < mpPer + bpPer:
                 p = BrokenPlatform(self, random.randrange(0, WIDTH - width), pTopVal - random.randrange(
                     50 + min(int(self.score / 10), 189), 240))
