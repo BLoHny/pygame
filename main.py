@@ -44,11 +44,14 @@ class Game:
             path.join(self.snd_dir, 'game_over.wav'))
         self.jump_sound = pg.mixer.Sound(
             path.join(self.snd_dir, 'jumpSound.wav'))
+        self.gameover_sound.set_volume(SFXVOLUME)
+        self.jump_sound.set_volume(SFXVOLUME)
 
     def new(self):
         self.score = 0
         self.all_sprites = pg.sprite.Group()
         self.platforms = []
+        self.cList = []
 
         self.player = Player(self)
         self.player.rect.x = WIDTH / 2 - 50
@@ -60,6 +63,7 @@ class Game:
             self.platforms.append(p)
 
         pg.mixer.music.load(path.join(self.snd_dir, 'happytune.mp3'))
+        pg.mixer.music.set_volume(BGMVOLUME)
 
         self.run()
 
@@ -202,9 +206,6 @@ class Game:
                     self.player.jumping = False
                     if type(platform) is BrokenPlatform:
                         if platform.genTime == 2147483647 : platform.genTime = time.time()
-                    
-
-                    
 
     def events(self):
         # Game Loop - Events
@@ -252,6 +253,7 @@ class Game:
 
     mn = 0
     def show_start_screen(self):
+        self.mn = 0
         # game splash/start screen
         # self.screen.blit(start_background,(0,0))
         while True:
@@ -269,7 +271,7 @@ class Game:
                         22, WHITE, WIDTH/2, 15)
             font = pg.font.SysFont('notosansmonocjkkrregular',22)
             cur = font.render('>', True, WHITE)
-            self.screen.blit(cur, (WIDTH/2 - 45, HEIGHT*3/4 + self.mn * 25))
+            self.screen.blit(cur, (WIDTH/2 - 45, HEIGHT*3/4 + 5 + self.mn * 25))
             pg.display.flip()
             for event in pg.event.get():
                 # check for closing window
@@ -278,9 +280,9 @@ class Game:
                         self.playing = False    
                     self.running = False
                 elif event.type == pg.KEYDOWN:
-                    if event.key == pg.K_UP:
+                    if event.key == pg.K_UP and self.mn > 0:
                         self.mn -= 1
-                    elif event.key == pg.K_DOWN:
+                    elif event.key == pg.K_DOWN and self.mn < 2:
                         self.mn += 1
                     elif event.key == pg.K_RETURN:
                         if self.mn == 0: return
@@ -291,7 +293,48 @@ class Game:
                             sys.exit()
                         
     def show_option_screen(self):
-        return
+        self.mn = 0
+        global BGMVOLUME
+        global SFXVOLUME
+        while True:
+            self.screen.fill(BGCOLOR)
+            self.draw_text("Exit Settings",
+                        22, WHITE, WIDTH/2 - 150, HEIGHT*1/6)
+            self.draw_text("Music Volume",
+                        22, WHITE, WIDTH/2 - 150, HEIGHT*1/6 + 25)
+            for i in range(0, int(BGMVOLUME * 100)):
+                self.draw_text(".", 22, WHITE, WIDTH/2 - 150 + i * 2, HEIGHT*1/6 + 50)
+            self.draw_text("SFX Volume",
+                        22, WHITE, WIDTH/2 - 150, HEIGHT*1/6 + 75)
+            for i in range(0, int(SFXVOLUME * 100)):
+                self.draw_text(".", 22, WHITE, WIDTH/2 - 150 + i * 2, HEIGHT*1/6 + 100)
+            font = pg.font.SysFont('notosansmonocjkkrregular',22)
+            cur = font.render('>', True, WHITE)
+            self.screen.blit(cur, (20, HEIGHT*1/6 + 5 + self.mn * 25))
+            pg.display.flip()
+            for event in pg.event.get():
+                # check for closing window
+                if event.type == pg.QUIT:
+                    if self.playing:
+                        self.playing = False    
+                    self.running = False
+                elif event.type == pg.KEYDOWN:
+                    if event.key == pg.K_UP and self.mn > 0:
+                        self.mn -= 1
+                    elif event.key == pg.K_DOWN and self.mn < 2:
+                        self.mn += 1
+                    elif event.key == pg.K_RETURN:
+                        if self.mn == 0: return
+                    elif event.key == pg.K_LEFT:
+                        if self.mn == 1 and BGMVOLUME > 0.0:
+                            BGMVOLUME -= 0.1
+                        elif self.mn == 2 and SFXVOLUME > 0.0:
+                            SFXVOLUME -= 0.1
+                    elif event.key == pg.K_RIGHT:
+                        if self.mn == 1 and BGMVOLUME < 1.0:
+                            BGMVOLUME += 0.1
+                        elif self.mn == 2 and SFXVOLUME < 1.0:
+                            SFXVOLUME += 0.1
 
     def show_go_screen(self):
         # game over/continue
