@@ -3,9 +3,10 @@ import random
 from settings import *
 from sprites import *
 from os import path
-import pygame, time
+import time
+import sys
 
-DEBUG = True
+DEBUG = False
 
 a = 1
 draw_background = pg.image.load("img/draw_backgroud.png")
@@ -108,9 +109,9 @@ class Game:
                     self.score += 10
             for coin in self.cList:
                 coin.rect.y += max(abs(self.player.vel.y), 5)
-                # if coin.rect >= HEIGHT:
-                #     coin.kill()
-                #     list.remove(self.cList, coin)
+                if coin.rect.y >= HEIGHT:
+                    coin.kill()
+                    list.remove(self.cList, coin)
                     
         # Spawn new platforms
         pListLen = len(self.platforms)
@@ -129,7 +130,7 @@ class Game:
             mpPer = 6 + int(self.score / 37.037)
             bpPer = 4 + int(self.score / 25.555555555555555) 
             if trig < mpPer:
-                if random.randrange(0, 1) == 0 and self.score >= 500:
+                if random.randrange(0, 2) == 0 and self.score >= 500:
                     startY = pTopVal - random.randrange(
                         50 + min(int(self.score / 10), 59), 110)
                     p = MovingYPlatform(self, random.randrange(0, WIDTH - width),
@@ -155,7 +156,9 @@ class Game:
             base = 0
             if len(self.cList) > 0:
                 base = self.cList[len(self.cList) - 1].rect.top
-            c = Coin(self, random.randrange(0, WIDTH - 30), base - random.randrange(600, 1000))
+            else:
+                base = self.platforms[len(self.platforms) - 1].rect.top
+            c = Coin(self, random.randrange(0, WIDTH - 30), base - random.randrange(1000, 1600))
             self.all_sprites.add(c)
             self.cList.append(c)
         
@@ -247,19 +250,48 @@ class Game:
         # *after* drawing everything, flip the display
         pg.display.flip()
 
+    mn = 0
     def show_start_screen(self):
         # game splash/start screen
-        self.screen.blit(start_background,(0,0))
-        # self.screen.fill(BGCOLOR)
-        # self.draw_text(TITLE, 48, WHITE, WIDTH/2, HEIGHT/4)
-        # self.draw_text("Arrows to move, Space to jump",
-        #                22, WHITE, WIDTH/2, HEIGHT/2)
-        # self.draw_text("Press a key to play",
-        #                22, WHITE, WIDTH/2, HEIGHT*3/4)
-        # self.draw_text("High Score : " + str(self.highscore),
-        #                22, WHITE, WIDTH/2, 15)
-        pg.display.flip()
-        self.wait_for_key()
+        # self.screen.blit(start_background,(0,0))
+        while True:
+            self.screen.fill(BGCOLOR)
+            self.draw_text(TITLE, 48, WHITE, WIDTH/2, HEIGHT/4)
+            self.draw_text("Arrows to move, Space to jump",
+                        22, WHITE, WIDTH/2, HEIGHT/2)
+            self.draw_text("Start",
+                        22, WHITE, WIDTH/2, HEIGHT*3/4)
+            self.draw_text("Options",
+                        22, WHITE, WIDTH/2, HEIGHT*3/4 + 25)
+            self.draw_text("Quit",
+                        22, WHITE, WIDTH/2, HEIGHT*3/4 + 50)
+            self.draw_text("High Score : " + str(self.highscore),
+                        22, WHITE, WIDTH/2, 15)
+            font = pg.font.SysFont('notosansmonocjkkrregular',22)
+            cur = font.render('>', True, WHITE)
+            self.screen.blit(cur, (WIDTH/2 - 45, HEIGHT*3/4 + self.mn * 25))
+            pg.display.flip()
+            for event in pg.event.get():
+                # check for closing window
+                if event.type == pg.QUIT:
+                    if self.playing:
+                        self.playing = False    
+                    self.running = False
+                elif event.type == pg.KEYDOWN:
+                    if event.key == pg.K_UP:
+                        self.mn -= 1
+                    elif event.key == pg.K_DOWN:
+                        self.mn += 1
+                    elif event.key == pg.K_RETURN:
+                        if self.mn == 0: return
+                        elif self.mn == 1: self.show_option_screen()
+                        elif self.mn == 2:  
+                            self.running = False
+                            pg.quit()
+                            sys.exit()
+                        
+    def show_option_screen(self):
+        return
 
     def show_go_screen(self):
         # game over/continue
