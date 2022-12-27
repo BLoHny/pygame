@@ -133,9 +133,11 @@ class Player(pg.sprite.Sprite):
                 self.image = self.standing_frames[self.current_frame]
                 self.rect = self.image.get_rect()
                 self.rect.bottom = bottom
-    def KeyChange():
+    def KeyChange(keyList : list):
         global KEY_LEFT
-        KEY_LEFT = pg.K_a
+        global KEY_RIGHT
+        KEY_LEFT = keyList[1]
+        KEY_RIGHT = keyList[2]
 
 
 
