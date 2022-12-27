@@ -1,0 +1,27 @@
+h1 {
+  font-size: 80px;
+  margin-left: 20px;
+  margin-top: 10px;
+  font-style: italic;
+  color: white
+}
+
+html{
+    background-color: black;
+}
+
+.button {
+  margin-left: 280px;
+  margin-top: 80px;
+  font-size: 180px;
+  border-width: 20px;
+  border-radius: 60px;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+.button:hover {
+  color: black;
+  background-color: white;
+}
