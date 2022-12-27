@@ -102,6 +102,8 @@ class Game:
         if self.score < 0:
             self.score = 0
         mhits = []
+        
+        print(KEY_LEFT)
 
         # Game Loop - Update
         # update special platforms
@@ -354,6 +356,7 @@ class Game:
                         self.mn += 1
                     elif event.key == KEY_ENTER:
                         if self.mn == 0:
+                            print(KEY_LEFT)
                             return
                         elif self.mn == 1:
                             self.show_option_screen()
@@ -380,6 +383,8 @@ class Game:
                   6 + 30, "Music Volume", WHITE, 22))
         ui.append(UIModule(WIDTH/2 - 150, HEIGHT *
                   1/6 + 90, "SFX Volume", WHITE, 22))
+        ui.append(UIModule(WIDTH/2 - 150, HEIGHT *
+                  1/6 + 150, "dk", WHITE, 22))
 
         interactable.append(
             UIModule(WIDTH/2 - 150, HEIGHT * 1/6, "Exit Settings", WHITE, 22))
@@ -387,6 +392,8 @@ class Game:
             UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 30, "Music Volume", WHITE, 22))
         interactable.append(
             UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 90, "SFX Volume", WHITE, 22))
+        interactable.append(
+            UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 150, "oh", WHITE, 22))
 
         while True:
             self.screen.fill(BGCOLOR)
@@ -426,6 +433,8 @@ class Game:
                     elif event.key == KEY_ENTER:
                         if self.mn == 0:
                             return
+                        elif self.mn == 1:
+                            Player.KeyChange()
                     elif event.key == KEY_LEFT:
                         if self.mn == 1 and BGMVOLUME >= 0.1:
                             BGMVOLUME -= 0.1
@@ -436,6 +445,7 @@ class Game:
                             BGMVOLUME += 0.1
                         elif self.mn == 2 and SFXVOLUME < 1.0:
                             SFXVOLUME += 0.1
+                            
 
     def show_go_screen(self):
         # game over/continue

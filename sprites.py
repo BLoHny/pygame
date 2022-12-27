@@ -84,8 +84,10 @@ class Player(pg.sprite.Sprite):
 
         if keys[KEY_LEFT]:
             self.acc.x = -PLAYER_ACC
+            print('KEY_LEFT :', KEY_LEFT)
         if keys[KEY_RIGHT]:
             self.acc.x = PLAYER_ACC
+            print('KEY_RIGHT :', KEY_RIGHT)
 
         self.acc.x += self.vel.x*PLAYER_FRICTION
         self.vel += self.acc
@@ -131,6 +133,10 @@ class Player(pg.sprite.Sprite):
                 self.image = self.standing_frames[self.current_frame]
                 self.rect = self.image.get_rect()
                 self.rect.bottom = bottom
+    def KeyChange():
+        global KEY_LEFT
+        KEY_LEFT = pg.K_a
+
 
 
 class Platform(pg.sprite.Sprite):
