@@ -25,3 +25,18 @@ html{
   color: black;
   background-color: white;
 }
+
+.bottom{
+  width: auto;
+  height: 200;
+  overflow: hidden;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+}
+
+.bottom #a1, #a2, #a3 {
+  width: 250px;
+  height: 200px;
+  opacity: 0.2;
+}
