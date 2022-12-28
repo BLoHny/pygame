@@ -10,12 +10,14 @@ DEBUG = False
 b = True
 
 a = 1
-draw_background = pg.image.load("res/img/draw_backgroud.png")
+
+resPath = path.abspath('res')
+draw_background = pg.image.load(path.join(resPath, "img/draw_backgroud.png"))
 draw_background = pg.transform.scale(draw_background, (480, 600))
-start_background = pg.image.load("res/img/start_background.jpg")
+start_background = pg.image.load(path.join(resPath, "img/start_background.jpg"))
 start_background = pg.transform.scale(start_background, (480, 600))
 
-end_background = pg.image.load("res/img/end_background.jpg")
+end_background = pg.image.load(path.join(resPath, "img/end_background.jpg"))
 end_background = pg.transform.scale(end_background, (480, 600))
 
 
@@ -45,18 +47,15 @@ class Game:
         self.load_data()
 
     def load_data(self):
-        self.dir = path.dirname(__file__)
-        img_dir = path.join(self.dir, 'res/img')
-
         try:
-            with open(path.join(self.dir, HS_FILE), 'r') as f:
+            with open(path.join(resPath, HS_FILE), 'r') as f:
                 self.highscore = int(f.read())
         except FileNotFoundError:
             self.highscore = 0
 
-        self.spritesheet = Spritesheet(path.join(img_dir, SPRITESHEET))
+        self.spritesheet = Spritesheet(path.join(resPath, SPRITESHEET))
 
-        self.snd_dir = path.join(self.dir, 'res/snd')
+        self.snd_dir = path.join(resPath, 'snd')
         self.gameover_sound = pg.mixer.Sound(
             path.join(self.snd_dir, 'game_over.wav'))
         self.jump_sound = pg.mixer.Sound(
@@ -80,7 +79,7 @@ class Game:
             self.all_sprites.add(p)
             self.platforms.append(p)
 
-        pg.mixer.music.load(path.join(self.snd_dir, 'happytune.mp3'))
+        pg.mixer.music.load(path.join(resPath, 'snd/happytune.mp3'))
         pg.mixer.music.set_volume(BGMVOLUME)
 
         self.run()
@@ -558,8 +557,8 @@ class Game:
             self.gameover_sound.play()
             self.highscore = self.score
             self.draw_text("NEW HIGH SCORE!",
-                           22, WHITE, WIDTH/2, HEIGHT/2 + 40)
-            with open(path.join(self.dir, HS_FILE), 'w') as f:
+                           22, BLACK, WIDTH/2, HEIGHT/2 + 120)
+            with open(path.join(resPath, HS_FILE), 'w') as f:
                 f.write(str(self.score))
         else:
             self.gameover_sound.play()

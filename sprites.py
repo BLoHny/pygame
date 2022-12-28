@@ -4,9 +4,11 @@ from random import choice
 import xml.etree.ElementTree as ET
 import random
 import time
+from os import path
 vec = pg.math.Vector2
 
-tree = ET.parse('res/img/spritesheet_jumper.xml')
+resPath = path.abspath("res")
+tree = ET.parse(path.join(resPath, 'img/spritesheet_jumper.xml'))
 root = tree.getroot()
 spriteDict : dict = {}
 for child in root:
