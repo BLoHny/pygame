@@ -1,6 +1,6 @@
 import pygame as pg
 # game options/settings
-TITLE = "Jumpy"
+TITLE = "PyRunner"
 WIDTH = 480
 HEIGHT = 600
 FPS = 60
