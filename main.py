@@ -354,7 +354,6 @@ class Game:
                         self.mn += 1
                     elif event.key == KEY_ENTER:
                         if self.mn == 0:
-                            print(KEY_LEFT)
                             return
                         elif self.mn == 1:
                             self.show_option_screen()
@@ -363,7 +362,7 @@ class Game:
                             pg.quit()
                             sys.exit()
 
-    def keybind_screen(self):
+    def show_option_screen(self):
         global KEY_LEFT
         global KEY_RIGHT
         global KEY_UP
@@ -373,101 +372,16 @@ class Game:
         self.mn = 0
         ui = []
         interactable = []
-        dummy = 0   
-        keyList = [dummy, KEY_LEFT, KEY_RIGHT,
-                   KEY_UP, KEY_DOWN, KEY_ENTER, KEY_JUMP]
-        ui.append(UIModule(WIDTH/2 - 140, HEIGHT *
-                  1/6, "Exit Key Binding", WHITE, 22))
-        ui.append(UIModule(WIDTH/2 - 150, HEIGHT * 1 /
-                  6 + 30, "Left Key", WHITE, 22))
-        ui.append(UIModule(WIDTH/2 - 150, HEIGHT *
-                  1/6 + 60, "Right Key", WHITE, 22))
-        ui.append(UIModule(WIDTH/2 - 150, HEIGHT *
-                  1/6 + 90, "Up Key", WHITE, 22))
-        ui.append(UIModule(WIDTH/2 - 150, HEIGHT *
-                  1/6 + 120, "Down Key", WHITE, 22))
-        ui.append(UIModule(WIDTH/2 - 150, HEIGHT *
-                  1/6 + 150, "Enter Key", WHITE, 22))
-        ui.append(UIModule(WIDTH/2 - 150, HEIGHT *
-                  1/6 + 180, "Jump Key", WHITE, 22))
-
-        interactable.append(
-            UIModule(WIDTH/2 - 140, HEIGHT * 1/6, "Exit Key Binding", WHITE, 22))
-        interactable.append(
-            UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 30, "Left Key", WHITE, 22))
-        interactable.append(
-            UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 60, "Right Key", WHITE, 22))
-        interactable.append(
-            UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 90, "Up Key", WHITE, 22))
-        interactable.append(UIModule(WIDTH/2 - 150, HEIGHT *
-                                     1/6 + 120, "Down Key", WHITE, 22))
-        interactable.append(UIModule(WIDTH/2 - 150, HEIGHT *
-                                     1/6 + 150, "Enter Key", WHITE, 22))
-        interactable.append(UIModule(WIDTH/2 - 150, HEIGHT *
-                                     1/6 + 180, "Jump Key", WHITE, 22))
-
-        while True:
-            self.screen.fill(BGCOLOR)
-            tVal = 0
-            for m in ui:
-                self.draw_text(m.text, m.fontSize, m.color, m.x, m.y)
-                pg.draw.line(self.screen, WHITE, [
-                    20, m.y], [460, m.y], 2)
-                if tVal != 0:
-                    self.draw_text(pg.key.name(
-                        keyList[tVal]), 22, WHITE, m.x + 100, m.y)
-                tVal += 1
-
-            font = pg.font.SysFont('notosansmonocjkkrregular', 22)
-            cur = font.render('>', True, WHITE)
-            self.screen.blit(cur, (20, 5 + interactable[self.mn].y))
-            pg.display.flip()
-            for event in pg.event.get():
-                # check for closing window
-                if event.type == pg.QUIT:
-                    self.running = False
-                    pg.quit()
-                    sys.exit()
-                elif event.type == pg.KEYDOWN:
-                    if event.key == KEY_UP and self.mn > 0:
-                        self.mn -= 1
-                    elif event.key == KEY_DOWN and self.mn < interactable.__len__() - 1:
-                        self.mn += 1
-                    elif event.key == KEY_ENTER:
-                        if self.mn == 0:
-                            return
-                        else:
-                            flag = True
-                            while flag:
-                                for event in pg.event.get():
-                                    if event.type == pg.KEYDOWN:
-                                        if event.key == pg.K_ESCAPE:
-                                            flag = False
-                                            break
-                                        keyList[self.mn] = event.key
-                                        flag = False
-                            KEY_LEFT = keyList[1]
-                            KEY_RIGHT = keyList[2]
-                            KEY_UP = keyList[3]
-                            KEY_DOWN = keyList[4]
-                            KEY_ENTER = keyList[5]
-                            KEY_JUMP = keyList[6]
-                            Player.KeyChange(keyList)
-
-    def show_option_screen(self):
-        self.mn = 0
-        ui = []
-        interactable = []
         global BGMVOLUME
         global SFXVOLUME
+        ui.append(UIModule(WIDTH/2, HEIGHT *
+                  1/12-30, "Option", WHITE, 32))
         ui.append(UIModule(WIDTH/2 - 150, HEIGHT *
                   1/6, "Exit Settings", WHITE, 22))
         ui.append(UIModule(WIDTH/2 - 150, HEIGHT * 1 /
                   6 + 30, "Music Volume", WHITE, 22))
         ui.append(UIModule(WIDTH/2 - 150, HEIGHT *
                   1/6 + 90, "SFX Volume", WHITE, 22))
-        ui.append(UIModule(WIDTH/2 - 150, HEIGHT *
-                  1/6 + 150, "Key Binding", WHITE, 22))
 
         interactable.append(
             UIModule(WIDTH/2 - 150, HEIGHT * 1/6, "Exit Settings", WHITE, 22))
@@ -475,11 +389,10 @@ class Game:
             UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 30, "Music Volume", WHITE, 22))
         interactable.append(
             UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 90, "SFX Volume", WHITE, 22))
-        interactable.append(
-            UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 150, "Key Binding", WHITE, 22))
 
         while True:
-            self.screen.fill(BGCOLOR)
+            #self.screen.fill(BGCOLOR)
+            self.screen.blit(draw_background, (0, 0))
             for m in ui:
                 self.draw_text(m.text, m.fontSize, m.color, m.x, m.y)
             pg.draw.line(self.screen, WHITE, [WIDTH/2 - 150, HEIGHT*1/6 + 70], [
@@ -492,13 +405,9 @@ class Game:
                            WHITE, 60, HEIGHT*1/6 + 120)
 
             pg.draw.line(self.screen, WHITE, [
-                         20, HEIGHT*1/6], [460, HEIGHT*1/6], 2)
-            pg.draw.line(self.screen, WHITE, [
                          20, HEIGHT*1/6 + 30], [460, HEIGHT*1/6 + 30], 2)
             pg.draw.line(self.screen, WHITE, [
                          20, HEIGHT*1/6 + 90], [460, HEIGHT*1/6 + 90], 2)
-            pg.draw.line(self.screen, WHITE, [
-                         20, HEIGHT*1/6 + 150], [460, HEIGHT*1/6 + 150], 2)
 
             font = pg.font.SysFont('notosansmonocjkkrregular', 22)
             cur = font.render('>', True, WHITE)
@@ -520,8 +429,6 @@ class Game:
                     elif event.key == KEY_ENTER:
                         if self.mn == 0:
                             return
-                        elif self.mn == 3:
-                            self.keybind_screen()
                     elif event.key == KEY_LEFT:
                         if self.mn == 1 and BGMVOLUME >= 0.1:
                             BGMVOLUME -= 0.1
@@ -547,9 +454,7 @@ class Game:
         # self.draw_text("GAME OVER", 48, WHITE, WIDTH/2, HEIGHT/4)
         self.draw_text("Score : " + str(p),
                        22, BLACK, WIDTH/2, HEIGHT/1/12)
-        self.draw_text("Press ESC key to go to main menu",
-                       22, BLACK, WIDTH/2, HEIGHT*10/12 - 30)
-        self.draw_text("Press any key to play again",
+        self.draw_text("Press a key to play again",
                        22, BLACK, WIDTH/2, HEIGHT*10/12)
 
         if self.score > self.highscore:
@@ -565,21 +470,7 @@ class Game:
                            22, WHITE, WIDTH/2, 15)
 
         pg.display.flip()
-        global mainMenuFlag
-        waiting = True
-        while waiting:
-            for event in pg.event.get():
-                # check for closing window
-                if event.type == pg.QUIT:
-                    if self.playing:
-                        self.playing = False
-                    self.running = False
-                    pg.quit()
-                    sys.exit()
-                elif event.type == pg.KEYDOWN:
-                    if event.key == pg.K_ESCAPE:
-                        mainMenuFlag = True
-                    waiting = False
+        self.wait_for_key()
 
     def wait_for_key(self):
         waiting = True
@@ -602,11 +493,7 @@ class Game:
 
 g = Game()
 g.show_start_screen()
-mainMenuFlag = False
 while g.running:
-    if mainMenuFlag :
-        g.show_start_screen()
-        mainMenuFlag = False
     g.new()
     g.show_go_screen()
 
