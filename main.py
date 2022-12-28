@@ -10,12 +10,12 @@ DEBUG = False
 b = True
 
 a = 1
-draw_background = pg.image.load("img/draw_backgroud.png")
+draw_background = pg.image.load("res/img/draw_backgroud.png")
 draw_background = pg.transform.scale(draw_background, (480, 600))
-start_background = pg.image.load("img/start_background.jpg")
+start_background = pg.image.load("res/img/start_background.jpg")
 start_background = pg.transform.scale(start_background, (480, 600))
 
-end_background = pg.image.load("img/end_background.jpg")
+end_background = pg.image.load("res/img/end_background.jpg")
 end_background = pg.transform.scale(end_background, (480, 600))
 
 
@@ -46,7 +46,7 @@ class Game:
 
     def load_data(self):
         self.dir = path.dirname(__file__)
-        img_dir = path.join(self.dir, 'img')
+        img_dir = path.join(self.dir, 'res/img')
 
         try:
             with open(path.join(self.dir, HS_FILE), 'r') as f:
@@ -56,7 +56,7 @@ class Game:
 
         self.spritesheet = Spritesheet(path.join(img_dir, SPRITESHEET))
 
-        self.snd_dir = path.join(self.dir, 'snd')
+        self.snd_dir = path.join(self.dir, 'res/snd')
         self.gameover_sound = pg.mixer.Sound(
             path.join(self.snd_dir, 'game_over.wav'))
         self.jump_sound = pg.mixer.Sound(

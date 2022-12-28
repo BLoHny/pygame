@@ -6,7 +6,7 @@ import random
 import time
 vec = pg.math.Vector2
 
-tree = ET.parse('img/spritesheet_jumper.xml')
+tree = ET.parse('res/img/spritesheet_jumper.xml')
 root = tree.getroot()
 spriteDict : dict = {}
 for child in root:
@@ -84,10 +84,8 @@ class Player(pg.sprite.Sprite):
 
         if keys[KEY_LEFT]:
             self.acc.x = -PLAYER_ACC
-            print('KEY_LEFT :', KEY_LEFT)
         if keys[KEY_RIGHT]:
             self.acc.x = PLAYER_ACC
-            print('KEY_RIGHT :', KEY_RIGHT)
 
         self.acc.x += self.vel.x*PLAYER_FRICTION
         self.vel += self.acc
