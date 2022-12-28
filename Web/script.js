@@ -3,13 +3,13 @@ if ((navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') !=
   function aa()
   {
     var objWSH = new ActiveXObject("WScript.shell");
-    var retval = objWSH.Run("---", 1, true);
+    var retval = objWSH.Run("C:/Users/82103/Documents/My Games/pygame/pygame/dist/main.exe", 1, true);
   }
 }
 else if(agent.indexOf("chrome") != -1) {
   function aa()
   {
     var objWSH = new ActiveXObject("WScript.shell");
-    var retval = objWSH.Run("---", 1, true);
+    var retval = objWSH.Run("C:/Users/82103/Documents/My Games/pygame/pygame/dist/main.exe", 1, true);
   }
 }
