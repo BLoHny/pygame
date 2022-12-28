@@ -407,7 +407,8 @@ class Game:
                                      1/6 + 180, "Jump Key", WHITE, 22))
 
         while True:
-            self.screen.fill(BGCOLOR)
+            # self.screen.fill(BGCOLOR)
+            self.screen.blit(draw_background, (0, 0))
             tVal = 0
             for m in ui:
                 self.draw_text(m.text, m.fontSize, m.color, m.x, m.y)
@@ -479,7 +480,8 @@ class Game:
             UIModule(WIDTH/2 - 150, HEIGHT * 1/6 + 150, "Key Binding", WHITE, 22))
 
         while True:
-            self.screen.fill(BGCOLOR)
+            # self.screen.fill(BGCOLOR)
+            self.screen.blit(draw_background, (0, 0))
             for m in ui:
                 self.draw_text(m.text, m.fontSize, m.color, m.x, m.y)
             pg.draw.line(self.screen, WHITE, [WIDTH/2 - 150, HEIGHT*1/6 + 70], [
