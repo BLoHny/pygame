@@ -444,7 +444,13 @@ class Game:
                                         if event.key == pg.K_ESCAPE:
                                             flag = False
                                             break
-                                        keyList[self.mn] = event.key
+                                        keyCheck = event.key
+                                        for dk in keyList:
+                                            if keyCheck == dk:
+                                                keyCheck = False
+                                                
+                                        if keyCheck != False:
+                                            keyList[self.mn] = keyCheck
                                         flag = False
                             KEY_LEFT = keyList[1]
                             KEY_RIGHT = keyList[2]
