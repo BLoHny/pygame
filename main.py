@@ -353,7 +353,6 @@ class Game:
                         self.mn += 1
                     elif event.key == KEY_ENTER:
                         if self.mn == 0:
-                            print(KEY_LEFT)
                             return
                         elif self.mn == 1:
                             self.show_option_screen()
